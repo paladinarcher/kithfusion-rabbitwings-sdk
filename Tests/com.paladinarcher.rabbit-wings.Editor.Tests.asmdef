@@ -1,0 +1,14 @@
+{
+    "name": "com.paladinarcher.rabbit-wings.Tests",
+    "references": [
+        "com.paladinarcher.rabbit-wings"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

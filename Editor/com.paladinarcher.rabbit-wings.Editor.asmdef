@@ -1,0 +1,15 @@
+{
+    "name": "com.paladinarcher.rabbit-wings.Editor",
+    "references": [
+        "com.paladinarcher.rabbit-wings",
+        "UnityEditor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
