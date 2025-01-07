@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace RabbitWings.Core
 {
-	public class XsollaWebBrowser : MonoBehaviour
+	public class WebBrowser : MonoBehaviour
 	{
 		private static IInAppBrowser _inAppBrowser;
 

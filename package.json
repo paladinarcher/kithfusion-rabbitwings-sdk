@@ -1,6 +1,6 @@
 {
     "name": "com.paladinarcher.rabbit-wings",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "displayName": "Rabbit Wings SDK",
     "description": "SDK for managing Rabbit Wings integrations.",
     "unity": "2022.1",
