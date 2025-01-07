@@ -555,46 +555,47 @@ namespace RabbitWings.Auth
 		/// <param name="state">Value used for additional user verification on backend. Must be at least 8 symbols long. `xsollatest` by default. Required for OAuth 2.0.</param>
 		public static void AuthViaDeviceID(Action onSuccess, Action<Error> onError, DeviceInfo deviceInfo = null, string redirectUri = null, string state = null)
 		{
-#if !(UNITY_ANDROID || UNITY_IOS)
-			onError?.Invoke(new Error(ErrorType.NotSupportedOnCurrentPlatform, "This method is only available for Android and iOS platforms"));
-#else
-			if (deviceInfo == null)
-			{
-				deviceInfo = new DeviceInfo {
-					DeviceId = DeviceIdUtil.GetDeviceId(),
-					DeviceModel = DeviceIdUtil.GetDeviceModel(),
-					DeviceName = DeviceIdUtil.GetDeviceName()
-				};
+            onError?.Invoke(new Error(ErrorType.NotSupportedOnCurrentPlatform, "This method is not currently available"));
+//#if !(UNITY_ANDROID || UNITY_IOS)
+//            onError?.Invoke(new Error(ErrorType.NotSupportedOnCurrentPlatform, "This method is only available for Android and iOS platforms"));
+//#else
+//			if (deviceInfo == null)
+//			{
+//				deviceInfo = new DeviceInfo {
+//					DeviceId = DeviceIdUtil.GetDeviceId(),
+//					DeviceModel = DeviceIdUtil.GetDeviceModel(),
+//					DeviceName = DeviceIdUtil.GetDeviceName()
+//				};
 
-#if UNITY_ANDROID
-				deviceInfo.DeviceType = Core.DeviceType.Android;
-#elif UNITY_IOS
-				deviceInfo.DeviceType = Core.DeviceType.iOS;
-#endif
-			}
+//#if UNITY_ANDROID
+//				deviceInfo.DeviceType = Core.DeviceType.Android;
+//#elif UNITY_IOS
+//				deviceInfo.DeviceType = Core.DeviceType.iOS;
+//#endif
+//			}
 
-			var deviceType = deviceInfo.DeviceType.ToString().ToLower();
-			var url = new UrlBuilder(BASE_URL + $"/oauth2/login/device/{deviceType}")
-				.AddClientId(XsollaSettings.OAuthClientId)
-				.AddResponseType(GetResponseType())
-				.AddState(GetState(state))
-				.AddRedirectUri(RedirectUrlHelper.GetRedirectUrl(redirectUri))
-				.AddScope(GetScope())
-				.Build();
+//			var deviceType = deviceInfo.DeviceType.ToString().ToLower();
+//			var url = new UrlBuilder(BASE_URL + $"/oauth2/login/device/{deviceType}")
+//				.AddClientId(XsollaSettings.OAuthClientId)
+//				.AddResponseType(GetResponseType())
+//				.AddState(GetState(state))
+//				.AddRedirectUri(RedirectUrlHelper.GetRedirectUrl(redirectUri))
+//				.AddScope(GetScope())
+//				.Build();
 
-			var requestData = new AuthViaDeviceIdRequest {
-				device = $"{deviceInfo.DeviceModel}:{deviceInfo.DeviceName}",
-				device_id = deviceInfo.DeviceId
-			};
+//			var requestData = new AuthViaDeviceIdRequest {
+//				device = $"{deviceInfo.DeviceModel}:{deviceInfo.DeviceName}",
+//				device_id = deviceInfo.DeviceId
+//			};
 
-			WebRequestHelper.Instance.PostRequest<LoginLink, AuthViaDeviceIdRequest>(
-				SdkType.Login,
-				url,
-				requestData,
-				response => ParseCodeFromUrlAndExchangeToToken(response.login_url, onSuccess, onError),
-				onError,
-				ErrorGroup.LoginErrors);
-#endif
+//			WebRequestHelper.Instance.PostRequest<LoginLink, AuthViaDeviceIdRequest>(
+//				SdkType.Login,
+//				url,
+//				requestData,
+//				response => ParseCodeFromUrlAndExchangeToToken(response.login_url, onSuccess, onError),
+//				onError,
+//				ErrorGroup.LoginErrors);
+//#endif
 		}
 
 		/// <summary>
