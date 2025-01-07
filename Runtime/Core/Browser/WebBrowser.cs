@@ -43,72 +43,74 @@ namespace RabbitWings.Core
 
 		public static void OpenPurchaseUI(string paymentToken, bool forcePlatformBrowser = false, Action<BrowserCloseInfo> onBrowserClosed = null)
 		{
-#if UNITY_ANDROID
-			if (!Application.isEditor && XsollaSettings.InAppBrowserEnabled)
-			{
-				new AndroidPayments().Perform(
-					paymentToken,
-					isClosedManually =>
-					{
-						var info = new BrowserCloseInfo {
-							isManually = isClosedManually
-						};
-						onBrowserClosed?.Invoke(info);
-					});
+			Debug.warning("Unable to open perchase UI.");
+			return;
+//#if UNITY_ANDROID
+//			if (!Application.isEditor && XsollaSettings.InAppBrowserEnabled)
+//			{
+//				new AndroidPayments().Perform(
+//					paymentToken,
+//					isClosedManually =>
+//					{
+//						var info = new BrowserCloseInfo {
+//							isManually = isClosedManually
+//						};
+//						onBrowserClosed?.Invoke(info);
+//					});
 
-				return;
-			}
+//				return;
+//			}
 
-#elif UNITY_IOS
-			if (!Application.isEditor && XsollaSettings.InAppBrowserEnabled)
-			{
-				new IosPayments().Perform(
-					paymentToken,
-					isClosedManually =>
-					{
-						var info = new BrowserCloseInfo {
-							isManually = isClosedManually
-						};
-						onBrowserClosed?.Invoke(info);
-					});
+//#elif UNITY_IOS
+//			if (!Application.isEditor && XsollaSettings.InAppBrowserEnabled)
+//			{
+//				new IosPayments().Perform(
+//					paymentToken,
+//					isClosedManually =>
+//					{
+//						var info = new BrowserCloseInfo {
+//							isManually = isClosedManually
+//						};
+//						onBrowserClosed?.Invoke(info);
+//					});
 
-				return;
-			}
+//				return;
+//			}
 
-#elif UNITY_WEBGL && !UNITY_EDITOR
-			if (XsollaSettings.InAppBrowserEnabled)
-			{
-				WebGLBrowserClosedCallback = isManually =>
-				{
-					var info = new BrowserCloseInfo {
-						isManually = isManually
-					};
-					onBrowserClosed?.Invoke(info);
-				};
+//#elif UNITY_WEBGL && !UNITY_EDITOR
+//			if (XsollaSettings.InAppBrowserEnabled)
+//			{
+//				WebGLBrowserClosedCallback = isManually =>
+//				{
+//					var info = new BrowserCloseInfo {
+//						isManually = isManually
+//					};
+//					onBrowserClosed?.Invoke(info);
+//				};
 
-				Screen.fullScreen = false;
-				OpenPaystationWidget(paymentToken, XsollaSettings.IsSandbox);
-				return;
-			}
-#endif
+//				Screen.fullScreen = false;
+//				OpenPaystationWidget(paymentToken, XsollaSettings.IsSandbox);
+//				return;
+//			}
+//#endif
 
-			var url = XsollaSettings.IsSandbox
-				? Constants.PAYSTATION_SANDBOX_URL
-				: Constants.PAYSTATION_URL;
+//			var url = XsollaSettings.IsSandbox
+//				? Constants.PAYSTATION_SANDBOX_URL
+//				: Constants.PAYSTATION_URL;
 
-			url = new UrlBuilder(url)
-				.AddParam("access_token", paymentToken)
-				.Build();
+//			url = new UrlBuilder(url)
+//				.AddParam("access_token", paymentToken)
+//				.Build();
 
-			Open(url, forcePlatformBrowser);
+//			Open(url, forcePlatformBrowser);
 
-#if UNITY_STANDALONE || UNITY_EDITOR
-			if (InAppBrowser != null && !forcePlatformBrowser)
-			{
-				UpdateBrowserSize();
-				InAppBrowser.CloseEvent += onBrowserClosed;
-			}
-#endif
+//#if UNITY_STANDALONE || UNITY_EDITOR
+//			if (InAppBrowser != null && !forcePlatformBrowser)
+//			{
+//				UpdateBrowserSize();
+//				InAppBrowser.CloseEvent += onBrowserClosed;
+//			}
+//#endif
 		}
 
 		public static void Open(string url, bool forcePlatformBrowser = false)
