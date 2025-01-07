@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace RabbitWings.Account.Entities
+namespace RabbitWings.Account
 {
     public class LoginRequest
     {

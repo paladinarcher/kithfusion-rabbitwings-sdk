@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace RabbitWings.Core.Utilities
+namespace RabbitWings.Core
 {
     /// <summary>
     /// Provides methods to validate common data formats.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace RabbitWings.Core.Utilities
+namespace RabbitWings.Core
 {
     /// <summary>
     /// Handles API key management and validation.

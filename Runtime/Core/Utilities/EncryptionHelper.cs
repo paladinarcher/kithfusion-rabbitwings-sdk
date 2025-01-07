@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace RabbitWings.Core.Utilities
+namespace RabbitWings.Core
 {
     /// <summary>
     /// Provides methods for password hashing and encryption.

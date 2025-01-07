@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace RabbitWings.Core.Utilities
+namespace RabbitWings.Core
 {
 	/// <summary>
 	/// Provides centralized logging functionality for the RabbitWings SDK.

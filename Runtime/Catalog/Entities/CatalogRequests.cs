@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace RabbitWings.Catalog.Entities
+namespace RabbitWings.Catalog
 {
     internal class GetItemRequest
     {

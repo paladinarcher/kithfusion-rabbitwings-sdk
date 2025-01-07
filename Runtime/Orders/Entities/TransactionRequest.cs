@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace RabbitWings.Orders.Entities
+namespace RabbitWings.Orders
 {
     /// <summary>
     /// Represents a request for a transaction.
