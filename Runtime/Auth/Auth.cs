@@ -785,16 +785,17 @@ namespace RabbitWings.Auth
 		/// <param name="onError">Called after the request resulted with an error.</param>
 		/// <param name="onCancel">Called in case user closed browser.</param>
 		public static void AuthViaSocialNetwork(SocialProvider provider, Action onSuccess, Action<Error> onError, Action onCancel)
-		{
-#if UNITY_WEBGL
-			onError?.Invoke(new Error(ErrorType.NotSupportedOnCurrentPlatform, errorMessage: "Social auth is not supported for WebGL"));
-#elif UNITY_ANDROID
-			new AndroidSocialAuth().Perform(provider, onSuccess, onError, onCancel);
-#elif UNITY_IOS
-			new IosSocialAuth().Perform(provider, onSuccess, onError, onCancel);
-#else
-			new StandaloneSocialAuth().Perform(provider, onSuccess, onError, onCancel);
-#endif
+        {
+            onError?.Invoke(new Error(ErrorType.NotSupportedOnCurrentPlatform, "This method is not currently available"));
+//#if UNITY_WEBGL
+//			onError?.Invoke(new Error(ErrorType.NotSupportedOnCurrentPlatform, errorMessage: "Social auth is not supported for WebGL"));
+//#elif UNITY_ANDROID
+//			new AndroidSocialAuth().Perform(provider, onSuccess, onError, onCancel);
+//#elif UNITY_IOS
+//			new IosSocialAuth().Perform(provider, onSuccess, onError, onCancel);
+//#else
+//            new StandaloneSocialAuth().Perform(provider, onSuccess, onError, onCancel);
+//#endif
 		}
 
 		private static void ParseCodeFromUrlAndExchangeToToken(string url, Action onSuccess, Action<Error> onError)
