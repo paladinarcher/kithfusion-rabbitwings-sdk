@@ -43,7 +43,7 @@ namespace RabbitWings.Core
 
 		public static void OpenPurchaseUI(string paymentToken, bool forcePlatformBrowser = false, Action<BrowserCloseInfo> onBrowserClosed = null)
 		{
-			Debug.warning("Unable to open perchase UI.");
+			Debug.LogWarning("Unable to open perchase UI.");
 			return;
 //#if UNITY_ANDROID
 //			if (!Application.isEditor && XsollaSettings.InAppBrowserEnabled)
