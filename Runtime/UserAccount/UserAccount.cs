@@ -478,7 +478,7 @@ namespace RabbitWings.UserAccount
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Erro inesperado ao adicionar credenciais: {ex.Message}");
+                Debug.LogError($"Error: {ex.Message}");
                 onError?.Invoke();
             }
         }

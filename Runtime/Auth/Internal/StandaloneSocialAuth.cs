@@ -8,7 +8,7 @@ namespace RabbitWings.Auth
 		public void Perform(SocialProvider provider, Action onSuccess, Action<Error> onError, Action onCancel)
 		{
 			var socialNetworkAuthUrl = Auth.GetSocialNetworkAuthUrl(provider);
-			var browser = XsollaWebBrowser.InAppBrowser;
+			var browser = WebBrowser.InAppBrowser;
 			browser.Open(socialNetworkAuthUrl);
 
 			browser.AddCloseHandler(() => onCancel?.Invoke());
@@ -23,7 +23,7 @@ namespace RabbitWings.Auth
 					code,
 					() =>
 					{
-						XsollaWebBrowser.Close();
+						WebBrowser.Close();
 						onSuccess?.Invoke();
 					},
 					onError);

@@ -244,8 +244,8 @@ public class AuthManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            var error = new Error("400", "Parâmetros inválidos", "Email ou senha não podem estar vazios");
-            onCreateError?.Invoke(error);
+        var error = new Error("400", "Invalid parameters", "Email or password cannot be empty");
+        onCreateError?.Invoke(error);
             return;
         }
 
@@ -265,24 +265,23 @@ public class AuthManager : MonoBehaviour
                 {
                     relogin = false;
 
-                    // Mapeamento dos novos códigos de erro
                     switch (e.statusCode)
                     {
                         case "404":
-                            Debug.LogError($"Usuário {userObj.email} não encontrado!");
+                            Debug.LogError($"User {userObj.email} not found!");
                             break;
                         case "401":
-                            Debug.LogError($"Credenciais inválidas para o usuário {userObj.email}!");
+                            Debug.LogError($"Invalid credentials for user {userObj.email}!");
                             relogin = true;
                             break;
                         case "400":
-                            Debug.LogError($"Parâmetros inválidos para o usuário {userObj.email}!");
+                            Debug.LogError($"Invalid parameters for user {userObj.email}!");
                             break;
                         case "500":
-                            Debug.LogError($"Erro do servidor ao processar a requisição para {userObj.email}!");
+                            Debug.LogError($"Server error while processing the request for {userObj.email}!");
                             break;
                         default:
-                            Debug.LogError($"Erro desconhecido: {e.statusCode}");
+                            Debug.LogError($"Unknown error: {e.statusCode}");
                             break;
                     }
 

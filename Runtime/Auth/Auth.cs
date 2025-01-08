@@ -427,8 +427,8 @@ namespace RabbitWings.Auth
 				.AddParam("login_url", RedirectUrlHelper.GetRedirectUrl(redirectUri))
 				.Build();
 
-			XsollaWebBrowser.Open(url);
-			var browser = XsollaWebBrowser.InAppBrowser;
+			WebBrowser.Open(url);
+			var browser = WebBrowser.InAppBrowser;
 
 			void onBrowserClose(BrowserCloseInfo info)
 			{
@@ -447,7 +447,7 @@ namespace RabbitWings.Auth
 
 				browser.CloseEvent -= onBrowserClose;
 				browser.UrlChangeEvent -= onBrowserUrlChange;
-				XsollaWebBrowser.Close();
+				WebBrowser.Close();
 			}
 
 			browser.CloseEvent += onBrowserClose;
