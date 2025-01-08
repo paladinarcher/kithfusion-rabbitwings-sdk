@@ -433,44 +433,64 @@ namespace RabbitWings.UserAccount
 				error => TokenAutoRefresher.Check(error, onError, () => RemoveUserAttributes(removingKeys, onSuccess, onError)));
 		}
 
-		/// <summary>
-		/// Adds a username, email address, and password, that can be used for authentication, to the current account.
-		/// </summary>
-		/// <remarks>[More about the use cases](https://developers.xsolla.com/sdk/unity/authentication/auth-via-device-id/).</remarks>
-		/// <param name="username">Username.</param>
-		/// <param name="password">User password.</param>
-		/// <param name="email">User email.</param>
-		/// <param name="onSuccess">Called after successful email and password linking.</param>
-		/// <param name="onError">Called after the request resulted with an error.</param>
-		/// <param name="redirectUri">URI to redirect the user to after account confirmation, successful authentication, two-factor authentication configuration, or password reset confirmation.
-		///     Must be identical to the OAuth 2.0 redirect URIs specified in Publisher Account.
-		///     Required if there are several URIs.</param>
-		/// <param name="promoEmailAgreement">Whether the user gave consent to receive the newsletters.</param>
-		public static void AddUsernameEmailAuthToAccount(string username, string password, string email, Action<AddUsernameAndEmailResult> onSuccess, Action<Error> onError, string redirectUri = null, int? promoEmailAgreement = null)
-		{
-			var url = new UrlBuilder($"{BaseUrl}/users/me/link_email_password")
-				.AddParam("login_url", RedirectUrlHelper.GetRedirectUrl(redirectUri))
-				.Build();
+        /// <summary>
+        /// Adds a username, email address, and password, that can be used for authentication, to the current account.
+        /// </summary>
+        /// <remarks>[More about the use cases](https://developers.xsolla.com/sdk/unity/authentication/auth-via-device-id/).</remarks>
+        /// <param name="username">Username.</param>
+        /// <param name="password">User password.</param>
+        /// <param name="email">User email.</param>
+        /// <param name="onSuccess">Called after successful email and password linking.</param>
+        /// <param name="onError">Called after the request resulted with an error.</param>
+        /// <param name="redirectUri">URI to redirect the user to after account confirmation, successful authentication, two-factor authentication configuration, or password reset confirmation.
+        ///     Must be identical to the OAuth 2.0 redirect URIs specified in Publisher Account.
+        ///     Required if there are several URIs.</param>
+        /// <param name="promoEmailAgreement">Whether the user gave consent to receive the newsletters.</param>
+        public static void AddUsernameEmailAuthToAccount(
+                string password,
+                string email,
+                Action onSuccess,
+                Action onError,
+                string redirectUri = null,
+                int? promoEmailAgreement = null)
+        {
+            try
+            {
+                var url = new UrlBuilder(Settings.BaseUrl)
+                    .AddParam("path", "/api/loginHandler")
+                    .Build();
 
-			var requestBody = new AddUsernameAndEmailRequest(username, password, email, promoEmailAgreement);
+                var requestBody = new AddUsernameAndEmailRequest(password, email);
 
-			WebRequestHelper.Instance.PostRequest(
-				SdkType.Login,
-				url,
-				requestBody,
-				WebRequestHeader.AuthHeader(),
-				onSuccess,
-				error => TokenAutoRefresher.Check(error, onError, () => AddUsernameEmailAuthToAccount(username, password, email, onSuccess, onError, redirectUri, promoEmailAgreement)),
-				ErrorGroup.RegistrationErrors);
-		}
+                WebRequestHelper.Instance.PostRequest(
+                    SdkType.Login,
+                    url,
+                    requestBody,
+                    WebRequestHeader.AuthHeader(),
+                    onSuccess,
+                    error => TokenAutoRefresher.Check(
+                        error,
+                        onError,
+                        () => AddUsernameEmailAuthToAccount(password, email, onSuccess, onError)
+                    ),
+                    ErrorGroup.RegistrationErrors
+                );
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Erro inesperado ao adicionar credenciais: {ex.Message}");
+                onError?.Invoke();
+            }
+        }
 
-		/// <summary>
-		/// Gets a list of user's devices.
-		/// </summary>
-		/// <remarks>[More about the use cases](https://developers.xsolla.com/sdk/unity/authentication/auth-via-device-id/).</remarks>
-		/// <param name="onSuccess">Called after users devices data was successfully received.</param>
-		/// <param name="onError">Called after the request resulted with an error.</param>
-		public static void GetUserDevices(Action<UserDevicesInfo> onSuccess, Action<Error> onError)
+
+        /// <summary>
+        /// Gets a list of user's devices.
+        /// </summary>
+        /// <remarks>[More about the use cases](https://developers.xsolla.com/sdk/unity/authentication/auth-via-device-id/).</remarks>
+        /// <param name="onSuccess">Called after users devices data was successfully received.</param>
+        /// <param name="onError">Called after the request resulted with an error.</param>
+        public static void GetUserDevices(Action<UserDevicesInfo> onSuccess, Action<Error> onError)
 		{
 			var url = $"{BaseUrl}/users/me/devices";
 

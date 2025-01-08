@@ -79,64 +79,95 @@ namespace RabbitWings.Auth
 				ErrorGroup.RegistrationErrors);
 		}
 
-		/// <summary>
-		/// Authenticates the user by the username/email and password specified via the authentication interface.
-		/// </summary>
-		/// <remarks>[More about the use cases](https://developers.xsolla.com/sdk/unity/authentication/classic-auth/).</remarks>
-		/// <param name="username">Username or email address.</param>
-		/// <param name="password">User password.</param>
-		/// <param name="onSuccess">Called after successful user authentication.</param>
-		/// <param name="onError">Called after the request resulted with an error.</param>
-		/// <param name="redirectUri">URI to redirect the user to after account confirmation, successful authentication, two-factor authentication configuration, or password reset confirmation.
-		///     Must be identical to the OAuth 2.0 redirect URIs specified in Publisher Account.
-		///     Required if there are several URIs.</param>
-		/// <seealso cref="SignInConsoleAccount"/>
-		/// <seealso cref="Register"/>
-		/// <seealso cref="ResetPassword"/>
-		/// <seealso cref="ResendConfirmationLink"/>
-		public static void SignIn(string username, string password, Action onSuccess, Action<Error> onError, string redirectUri = null)
-		{
-			var url = new UrlBuilder(BASE_URL + "/oauth2/login/token")
-				.AddClientId(XsollaSettings.OAuthClientId)
-				.AddRedirectUri(RedirectUrlHelper.GetRedirectUrl(redirectUri))
-				.AddScope(GetScope())
-				.Build();
+        /// <summary>
+        /// Authenticates the user by the username/email and password specified via the authentication interface.
+        /// </summary>
+        /// <remarks>[More about the use cases](https://developers.xsolla.com/sdk/unity/authentication/classic-auth/).</remarks>
+        /// <param name="username">Username or email address.</param>
+        /// <param name="password">User password.</param>
+        /// <param name="onSuccess">Called after successful user authentication.</param>
+        /// <param name="onError">Called after the request resulted with an error.</param>
+        /// <param name="redirectUri">URI to redirect the user to after account confirmation, successful authentication, two-factor authentication configuration, or password reset confirmation.
+        ///     Must be identical to the OAuth 2.0 redirect URIs specified in Publisher Account.
+        ///     Required if there are several URIs.</param>
+        /// <seealso cref="SignInConsoleAccount"/>
+        /// <seealso cref="Register"/>
+        /// <seealso cref="ResetPassword"/>
+        /// <seealso cref="ResendConfirmationLink"/>
+        public static void SignIn(string email, string password, Action onSuccess, Action<Error> onError, string redirectUri = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                {
+                    onError?.Invoke(new Error(
+                        "400",
+                        "Parâmetros inválidos",
+                        "BAD_REQUEST",
+                        "Email ou senha não podem estar vazios"
+                    ));
+                    return;
+                }
 
-			var requestData = new SignInRequest {
-				username = username,
-				password = password
-			};
+                XDebug.Log($"Initiating login process for user: {email}");
 
-			WebRequestHelper.Instance.PostRequest<TokenResponse, SignInRequest>(
-				SdkType.Login,
-				url,
-				requestData,
-				response =>
-				{
-					Token.Create(response.access_token, response.refresh_token);
-					onSuccess?.Invoke();
-				},
-				onError,
-				ErrorGroup.LoginErrors);
-		}
+                var url = new UrlBuilder(Settings.BaseUrl)
+                    .AddParam("path", "/api/loginHandler")
+                    .Build();
 
-		/// <summary>
-		/// Starts user authentication and sends an email with a one-time code and a link to the specified email address (if login via magic link is configured for the Login project)
-		/// </summary>
-		/// <remarks>[More about the use cases](https://developers.xsolla.com/sdk/unity/authentication/passwordless-auth/).</remarks>
-		/// <param name="email">User email address.</param>
-		/// <param name="onSuccess">Called after successful email authentication start.</param>
-		/// <param name="onError">Called after the request resulted with an error.</param>
-		/// <param name="redirectUri">URI to redirect the user to after account confirmation, successful authentication, two-factor authentication configuration, or password reset confirmation.
-		///     Must be identical to the OAuth 2.0 redirect URIs specified in Publisher Account.
-		///     Required if there are several URIs.</param>
-		/// <param name="state">Value used for additional user verification on backend. Must be at least 8 symbols long. `xsollatest` by default. Required for OAuth 2.0.</param>
-		/// <param name="locale">Defines localization of the email the user receives.
-		///     The following languages are supported: Arabic (`ar_AE`), Bulgarian (`bg_BG`), Czech (`cz_CZ`), German (`de_DE`), Spanish (`es_ES`), French (`fr_FR`), Hebrew (`he_IL`), Italian (`it_IT`), Japanese (`ja_JP`), Korean (`ko_KR`), Polish (`pl_PL`), Portuguese (`pt_BR`), Romanian (`ro_RO`), Russian (`ru_RU`), Thai (`th_TH`), Turkish (`tr_TR`), Vietnamese (`vi_VN`), Chinese Simplified (`zh_CN`), Chinese Traditional (`zh_TW`), English (`en_XX`, default).
-		/// </param>
-		/// <param name="sendLink">Shows whether a link is sent with the confirmation code in the email or not.</param>
-		/// <param name="linkUrl">URL to redirect the user to the status authentication page.</param>
-		public static void StartAuthByEmail(string email, Action<OperationId> onSuccess, Action<Error> onError, string redirectUri = null, string state = null, string locale = null, bool? sendLink = null, string linkUrl = null)
+                var signInRequest = new SignInRequest
+                {
+                    Email = email,
+                    Password = password
+                };
+
+                XDebug.Log($"Preparing login request to URL: {url}");
+
+                WebRequestHelper.Instance.PostRequest<SignInRequest, SignInRequest>(
+                    SdkType.Login,
+                    url,
+                    signInRequest,
+                    response =>
+                    {
+                        XDebug.Log($"Login successful");
+                        onSuccess?.Invoke();
+                    },
+                    error =>
+                    {
+                        XDebug.LogError($"Login failed: {error}");
+                        onError?.Invoke(error);
+                    },
+                    ErrorGroup.LoginErrors);
+            }
+            catch (Exception ex)
+            {
+                XDebug.LogError($"Unexpected error during login: {ex.Message}");
+                onError?.Invoke(new Error(
+                    "500",
+                    "Erro do servidor",
+                    "INTERNAL_SERVER_ERROR",
+                    $"Ocorreu um erro: {ex.Message}"
+                ));
+            }
+        }
+
+        /// <summary>
+        /// Starts user authentication and sends an email with a one-time code and a link to the specified email address (if login via magic link is configured for the Login project)
+        /// </summary>
+        /// <remarks>[More about the use cases](https://developers.xsolla.com/sdk/unity/authentication/passwordless-auth/).</remarks>
+        /// <param name="email">User email address.</param>
+        /// <param name="onSuccess">Called after successful email authentication start.</param>
+        /// <param name="onError">Called after the request resulted with an error.</param>
+        /// <param name="redirectUri">URI to redirect the user to after account confirmation, successful authentication, two-factor authentication configuration, or password reset confirmation.
+        ///     Must be identical to the OAuth 2.0 redirect URIs specified in Publisher Account.
+        ///     Required if there are several URIs.</param>
+        /// <param name="state">Value used for additional user verification on backend. Must be at least 8 symbols long. `xsollatest` by default. Required for OAuth 2.0.</param>
+        /// <param name="locale">Defines localization of the email the user receives.
+        ///     The following languages are supported: Arabic (`ar_AE`), Bulgarian (`bg_BG`), Czech (`cz_CZ`), German (`de_DE`), Spanish (`es_ES`), French (`fr_FR`), Hebrew (`he_IL`), Italian (`it_IT`), Japanese (`ja_JP`), Korean (`ko_KR`), Polish (`pl_PL`), Portuguese (`pt_BR`), Romanian (`ro_RO`), Russian (`ru_RU`), Thai (`th_TH`), Turkish (`tr_TR`), Vietnamese (`vi_VN`), Chinese Simplified (`zh_CN`), Chinese Traditional (`zh_TW`), English (`en_XX`, default).
+        /// </param>
+        /// <param name="sendLink">Shows whether a link is sent with the confirmation code in the email or not.</param>
+        /// <param name="linkUrl">URL to redirect the user to the status authentication page.</param>
+        public static void StartAuthByEmail(string email, Action<OperationId> onSuccess, Action<Error> onError, string redirectUri = null, string state = null, string locale = null, bool? sendLink = null, string linkUrl = null)
 		{
 			var url = new UrlBuilder(BASE_URL + "/oauth2/login/email/request")
 				.AddClientId(XsollaSettings.OAuthClientId)

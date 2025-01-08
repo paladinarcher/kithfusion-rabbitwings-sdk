@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 
 namespace RabbitWings.Account
 {
-    public class LoginRequest
+    [Serializable]
+    internal class SignInRequest
     {
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("password")]
-        public string Password { get; set; }
+        public string username;
+        public string password;
+        public bool? remember_me;
     }
 }
