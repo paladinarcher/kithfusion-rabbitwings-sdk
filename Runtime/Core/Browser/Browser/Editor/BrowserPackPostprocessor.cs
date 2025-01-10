@@ -14,10 +14,6 @@ namespace RabbitWings.Core.Browser
 
 		public void OnPostprocessBuild(BuildReport report)
 		{
-			if (report.summary.platformGroup != BuildTargetGroup.Standalone ||
-			    !XsollaSettings.InAppBrowserEnabled ||
-			    !XsollaSettings.PackInAppBrowserInBuild)
-				return;
 
 			var browserPlatform = string.Empty;
 			switch (report.summary.platform)

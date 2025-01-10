@@ -10,7 +10,7 @@ namespace RabbitWings.Core.Browser
 
 		public void OnPreprocessBuild(BuildReport report)
 		{
-			if (report.summary.platformGroup != BuildTargetGroup.Standalone || !XsollaSettings.InAppBrowserEnabled)
+			if (report.summary.platformGroup != BuildTargetGroup.Standalone)
 				return;
 
 			//Check IL2CPP — browser supports only Mono.

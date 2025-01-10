@@ -37,6 +37,7 @@
 ExportedObj/
 .consulo/
 *.csproj
+*.csproj.meta
 *.unityproj
 *.sln
 *.suo
@@ -126,3 +127,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+bin/
+bin.meta
+obj.meta
