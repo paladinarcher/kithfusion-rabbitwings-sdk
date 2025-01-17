@@ -95,6 +95,16 @@ namespace RabbitWings.Core
 			return AddParamAsArray("additional_fields", value);
 		}
 
+		public UrlBuilder AddId(string value)
+		{
+			return AddParam("id", value);
+		}
+
+		public UrlBuilder AddType(string value)
+		{
+			return AddParam("type", value);
+		}
+
 		public UrlBuilder AddArray<T>(string name, T[] values)
 		{
 			if (string.IsNullOrEmpty(name))
