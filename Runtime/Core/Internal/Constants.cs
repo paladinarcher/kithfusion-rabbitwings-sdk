@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace RabbitWings.Core
 {
 	public static class Constants
@@ -20,5 +22,18 @@ namespace RabbitWings.Core
 		public const float WEB_SOCKETS_TIMEOUT = 300f;
 		public const float SHORT_POLLING_INTERVAL = 3f;
 		public const float SHORT_POLLING_LIMIT = 600f;
-	}
+
+        public const string ITEM_GROUP_NOT_FOR_SALE = "nosell";
+        public const string ATTRIBUTE_INVENTORY_SHOW = "inventory_show";
+        public const string ATTRIBUTE_GOAL_ITEM = "goal_item";
+        public const string ATTRIBUTE_PHYSICAL_ITEM = "physical_item";
+        public const string ATTRIBUTE_GOAL_ITEM_ORDER = "goal_item_order";
+        public const string ATTRIBUTE_INVENTORY_SHOW_VALUE = "yes";
+        public const string CURRENCY_VALUE_ATTRIBUTE_ID = "ris_credit_sell_value";
+        public const string RIS_CURRENCY_SKU = "ris-credits";
+        public const string RIS_CURRENCY_VALUE_PREFIX = "ris_";
+        public const string GOAL_ITEM_PREFIX = "goal_";
+        public const string DEFAULT_DEBUG_PASSWORD = "asdf1234";
+        public const string VCURRENCY_PACKAGE_SKU = "RISCurrency";
+    }
 }

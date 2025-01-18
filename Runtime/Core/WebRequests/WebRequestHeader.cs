@@ -32,6 +32,15 @@
 			return header;
 		}
 
+		public static WebRequestHeader AuthXApi(string apiKey)
+		{
+			return new WebRequestHeader
+			{
+				Name = "x-api-key",
+				Value = apiKey
+			};
+		}
+
 		public static WebRequestHeader JsonContentTypeHeader()
 		{
 			return new WebRequestHeader {

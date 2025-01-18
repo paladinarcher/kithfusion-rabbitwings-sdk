@@ -11,11 +11,18 @@ namespace RabbitWings.Core
     {
         public static bool IS_PROD;
         public static string DEFAULT_PROD_URL;
-        public static string DEFAULT_DEV_URL;
+        public static string DEFAULT_DEV_URL = "https://7ex64pnyi7.execute-api.us-east-2.amazonaws.com/dev/rabbit-wings";
+        public static string DEFAULT_PROD_API_KEY = "MakeThesesRabbitsFly";
+        public static string DEFAULT_DEV_API_KEY = "MakeThesesRabbitsFly";
         public string prodUrl;
         public string devUrl;
+        public string prodApiKey;
+        public string devApiKey;
+
+        protected string apiKey;
 
         protected string url;
+        protected string urlPath = "";
 
         protected Coroutine runner;
 
@@ -28,10 +35,12 @@ namespace RabbitWings.Core
             if (IS_PROD)
             {
                 url = string.IsNullOrEmpty(prodUrl) ? DEFAULT_PROD_URL : prodUrl;
+                apiKey = string.IsNullOrEmpty(prodApiKey) ? DEFAULT_PROD_API_KEY : prodApiKey;
             }
             else
             {
                 url = string.IsNullOrEmpty(devUrl) ? DEFAULT_DEV_URL : devUrl;
+                apiKey = string.IsNullOrEmpty(devApiKey) ? DEFAULT_DEV_API_KEY : devApiKey;
             }
         }
 
@@ -50,13 +59,14 @@ namespace RabbitWings.Core
 
         public void GetCache(string key, Action<T> callback, Action<Error> onError)
         {
-            string getUrl = new UrlBuilder($"{url}/")
+            string getUrl = new UrlBuilder($"{url}/{urlPath}/")
                 .AddId(key)
                 .AddType(ObjectType.Name)
                 .Build();
 
             List<WebRequestHeader> headers = new List<WebRequestHeader>()
             {
+                WebRequestHeader.AuthXApi(apiKey),
                 WebRequestHeader.JsonContentTypeHeader()
             };
 
@@ -80,11 +90,12 @@ namespace RabbitWings.Core
 
         public void SetCache(IdObjectReference<T> myObject, Action<T> onCompleted, Action<Error> onError)
         {
-            string postUrl = new UrlBuilder($"{url}/")
+            string postUrl = new UrlBuilder($"{url}/{urlPath}/")
                 .Build();
 
             List<WebRequestHeader> headers = new List<WebRequestHeader>()
             {
+                WebRequestHeader.AuthXApi(apiKey),
                 WebRequestHeader.JsonContentTypeHeader()
             };
 
