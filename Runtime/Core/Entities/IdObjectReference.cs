@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RabbitWings.Core
 {
-    public class IdObjectReference<Y> : IEquatable<IdObjectReference<Y>> where T : class
+    public class IdObjectReference<Y> : IEquatable<IdObjectReference<Y>> where Y : class
     {
         public string id;
         public string type;

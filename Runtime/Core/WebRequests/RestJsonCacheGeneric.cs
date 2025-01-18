@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 namespace RabbitWings.Core
 {
-    public class RestJsonCacheGeneric<T> : MonoBehaviour
+    public class RestJsonCacheGeneric<T> : MonoBehaviour where T : class
     {
         public static bool IS_PROD;
         public static string DEFAULT_PROD_URL;

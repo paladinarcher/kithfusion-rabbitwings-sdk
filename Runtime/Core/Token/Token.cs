@@ -4,7 +4,7 @@ namespace RabbitWings.Core
 {
 	public static class Token
 	{
-		private const string SaveKey = "XsollaSuperToken";
+		private const string SaveKey = "RabbitWingsSuperToken";
 
 		public static string AccessToken => Instance?.accessToken;
 
