@@ -12,6 +12,7 @@ namespace RabbitWings.Core
     [Serializable]
     public class User : UserInfo
     {
+        public static User Current { get; set; }
         public List<VirtualCurrencyBalance> vcurrencyBalances;
         public List<InventoryItem> inventoryItems;
         public GoalItemManager goalItems;

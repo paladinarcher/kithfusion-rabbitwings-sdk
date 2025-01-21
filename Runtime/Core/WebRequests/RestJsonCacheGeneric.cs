@@ -7,13 +7,8 @@ using UnityEngine.Networking;
 
 namespace RabbitWings.Core
 {
-    public class RestJsonCacheGeneric<T> : MonoBehaviour where T : class
+    public abstract class RestJsonCacheGeneric<T> : MonoBehaviour where T : class
     {
-        public static bool IS_PROD;
-        public static string DEFAULT_PROD_URL;
-        public static string DEFAULT_DEV_URL = "https://7ex64pnyi7.execute-api.us-east-2.amazonaws.com/dev/rabbit-wings";
-        public static string DEFAULT_PROD_API_KEY = "MakeThesesRabbitsFly";
-        public static string DEFAULT_DEV_API_KEY = "MakeThesesRabbitsFly";
         public string prodUrl;
         public string devUrl;
         public string prodApiKey;
@@ -22,9 +17,10 @@ namespace RabbitWings.Core
         protected string apiKey;
 
         protected string url;
-        protected string urlPath = "";
 
         protected Coroutine runner;
+
+        protected abstract string GetDefaultPath();
 
         protected virtual void Awake()
         {
@@ -32,15 +28,15 @@ namespace RabbitWings.Core
         }
         protected virtual void Start()
         {
-            if (IS_PROD)
+            if (GlobalSettings.Instance.IsProd)
             {
-                url = string.IsNullOrEmpty(prodUrl) ? DEFAULT_PROD_URL : prodUrl;
-                apiKey = string.IsNullOrEmpty(prodApiKey) ? DEFAULT_PROD_API_KEY : prodApiKey;
+                url = string.IsNullOrEmpty(prodUrl) ? GlobalSettings.Instance.DefaultProdUrl : prodUrl;
+                apiKey = string.IsNullOrEmpty(prodApiKey) ? GlobalSettings.Instance.DefaultProdApiKey : prodApiKey;
             }
             else
             {
-                url = string.IsNullOrEmpty(devUrl) ? DEFAULT_DEV_URL : devUrl;
-                apiKey = string.IsNullOrEmpty(devApiKey) ? DEFAULT_DEV_API_KEY : devApiKey;
+                url = string.IsNullOrEmpty(devUrl) ? GlobalSettings.Instance.DefaultDevUrl : devUrl;
+                apiKey = string.IsNullOrEmpty(devApiKey) ? GlobalSettings.Instance.DefaultDevApiKey : devApiKey;
             }
         }
 
@@ -59,7 +55,7 @@ namespace RabbitWings.Core
 
         public void GetCache(string key, Action<T> callback, Action<Error> onError)
         {
-            string getUrl = new UrlBuilder($"{url}/{urlPath}/")
+            string getUrl = new UrlBuilder($"{url}/{GetDefaultPath()}/")
                 .AddId(key)
                 .AddType(ObjectType.Name)
                 .Build();
