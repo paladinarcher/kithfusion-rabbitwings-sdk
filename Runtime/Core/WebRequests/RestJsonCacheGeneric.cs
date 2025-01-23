@@ -86,7 +86,7 @@ namespace RabbitWings.Core
 
         public void SetCache(IdObjectReference<T> myObject, Action<T> onCompleted, Action<Error> onError)
         {
-            string postUrl = new UrlBuilder($"{url}/{urlPath}/")
+            string postUrl = new UrlBuilder($"{url}/{GetDefaultPath()}")
                 .Build();
 
             List<WebRequestHeader> headers = new List<WebRequestHeader>()

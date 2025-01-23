@@ -9,6 +9,7 @@ namespace RabbitWings.Core
 	{
 		public string id;
 		public string username;
+		public string password;
 		public string nickname;
 		public string name;
 		public string picture;
