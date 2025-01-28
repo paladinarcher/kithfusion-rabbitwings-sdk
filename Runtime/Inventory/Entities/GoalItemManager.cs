@@ -23,7 +23,7 @@ namespace RabbitWings.Inventory
 
         protected void Initialize()
         {
-            onInitialize.Invoke();
+            onInitialize?.Invoke();
         }
 
         public List<InventoryItem> GetItems(int goalId)
