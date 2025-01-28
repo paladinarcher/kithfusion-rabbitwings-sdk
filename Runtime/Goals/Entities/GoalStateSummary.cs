@@ -20,6 +20,9 @@ namespace RabbitWings.Goals
             s.SetState(states);
             return s;
         }
+        public GoalStateSummary() : this(1)
+        {
+        }
         public GoalStateSummary(int initialCount)
         {
             if (initialCount < 0)
