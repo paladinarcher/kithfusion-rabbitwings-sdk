@@ -54,7 +54,7 @@ namespace RabbitWings.Core
 
         public void GetCache(string key, Action<T> callback, Action<Error> onError)
         {
-            string getUrl = new UrlBuilder($"{url}/{GetDefaultPath()}/")
+            string getUrl = new UrlBuilder($"{url}/{GetDefaultPath()}")
                 .AddId(key)
                 .AddType(ObjectType.Name)
                 .Build();
