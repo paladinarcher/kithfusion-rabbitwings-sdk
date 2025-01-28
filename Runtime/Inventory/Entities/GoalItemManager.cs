@@ -4,12 +4,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RabbitWings.Inventory
 {
     [Serializable]
-    public abstract class GoalItemManager
+    public class GoalItemManager
     {
+        public UnityEvent onInitialize;
+
         [JsonProperty]
         protected Dictionary<int, List<InventoryItem>> list;
         public GoalItemManager()
@@ -18,7 +21,10 @@ namespace RabbitWings.Inventory
             Initialize();
         }
 
-        protected abstract void Initialize();
+        protected void Initialize()
+        {
+            onInitialize.Invoke();
+        }
 
         public List<InventoryItem> GetItems(int goalId)
         {
