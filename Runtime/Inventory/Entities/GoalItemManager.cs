@@ -8,7 +8,7 @@ using UnityEngine;
 namespace RabbitWings.Inventory
 {
     [Serializable]
-    public partial class GoalItemManager
+    public abstract class GoalItemManager
     {
         [JsonProperty]
         protected Dictionary<int, List<InventoryItem>> list;
@@ -18,10 +18,7 @@ namespace RabbitWings.Inventory
             Initialize();
         }
 
-        protected virtual void Initialize()
-        {
-
-        }
+        protected abstract void Initialize();
 
         public List<InventoryItem> GetItems(int goalId)
         {
