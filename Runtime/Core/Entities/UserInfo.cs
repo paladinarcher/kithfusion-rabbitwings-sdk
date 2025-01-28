@@ -19,8 +19,8 @@ namespace RabbitWings.Core
 		public string gender;
 		public string email;
 		public string phone;
-		public List<UserGroup> groups;
-		public List<UserDeviceInfo> devices;
+		public List<UserGroup> groups = new List<UserGroup>();
+		public List<UserDeviceInfo> devices = new List<UserDeviceInfo>();
 		public string registered;
 		public string external_id;
 		public string last_login;

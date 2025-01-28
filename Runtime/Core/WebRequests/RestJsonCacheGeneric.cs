@@ -24,10 +24,6 @@ namespace RabbitWings.Core
 
         protected virtual void Awake()
         {
-
-        }
-        protected virtual void Start()
-        {
             if (GlobalSettings.Instance.IsProd)
             {
                 url = string.IsNullOrEmpty(prodUrl) ? GlobalSettings.Instance.DefaultProdUrl : prodUrl;
@@ -38,6 +34,9 @@ namespace RabbitWings.Core
                 url = string.IsNullOrEmpty(devUrl) ? GlobalSettings.Instance.DefaultDevUrl : devUrl;
                 apiKey = string.IsNullOrEmpty(devApiKey) ? GlobalSettings.Instance.DefaultDevApiKey : devApiKey;
             }
+        }
+        protected virtual void Start()
+        {
         }
 
         public virtual string GetIDPrefix

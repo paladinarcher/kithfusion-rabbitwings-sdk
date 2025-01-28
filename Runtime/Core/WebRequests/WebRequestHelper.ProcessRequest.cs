@@ -126,7 +126,7 @@ namespace RabbitWings.Core
 				XDebug.Log($"{logMessage}\n");
 			}
 
-			if (ParseUtils.TryParseError(data, out error))
+			if (ParseUtils.TryParseError(webRequest.responseCode, data, out error))
 			{
 				if (ErrorTypeParser.TryGetSpecificType(error.statusCode, errorsToCheck, out var specificErrorType))
 					error.ErrorType = specificErrorType;

@@ -13,9 +13,9 @@ namespace RabbitWings.Core
     public class User : UserInfo
     {
         public static User Current { get; set; }
-        public List<VirtualCurrencyBalance> vcurrencyBalances;
-        public List<InventoryItem> inventoryItems;
-        public GoalItemManager goalItems;
-        public GoalStateSummary goalSummary;
+        public List<VirtualCurrencyBalance> vcurrencyBalances = new List<VirtualCurrencyBalance>();
+        public List<InventoryItem> inventoryItems = new List<InventoryItem>();
+        public GoalItemManager goalItems = new GoalItemManager();
+        public GoalStateSummary goalSummary = new GoalStateSummary(5);
     }
 }

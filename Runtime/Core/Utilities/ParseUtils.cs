@@ -38,8 +38,19 @@ namespace RabbitWings.Core
 			return result;
 		}
 
-		private static Error ParseError(string json)
+		private static Error ParseError(long statusCode, string json)
 		{
+			if (statusCode > 299)
+			{
+				SimpleError se = FromJson<SimpleError>(json);
+				Error e = new Error();
+				e.statusCode = statusCode.ToString();
+				e.errorMessage = se.message;
+				e.ErrorType = ErrorType.UnknownError;
+				e.errorCode = e.statusCode;
+				XDebug.LogError(ToJson<Error>(e));
+				return e;
+			}
 			if (json.Contains("statusCode") && json.Contains("errorCode") && json.Contains("errorMessage"))
 				return FromJson<Error>(json);
 
@@ -49,7 +60,7 @@ namespace RabbitWings.Core
 			return null;
 		}
 
-		public static bool TryParseError(string json, out Error error)
+		public static bool TryParseError(long responseCode, string json, out Error error)
 		{
 			if (string.IsNullOrEmpty(json))
 			{
@@ -59,7 +70,7 @@ namespace RabbitWings.Core
 
 			try
 			{
-				error = ParseError(json);
+				error = ParseError(responseCode, json);
 				return error != null;
 			}
 			catch (Exception ex)

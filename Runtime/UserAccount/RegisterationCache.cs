@@ -16,9 +16,6 @@ namespace RabbitWings.UserAccount
             user.email = email;
             user.username = username;
             user.password = password;
-            user.birthday = "12/31/2000";
-            user.country = "test";
-            user.gender = "Y";
             user.nickname = username;
             return user;
         }
@@ -30,6 +27,7 @@ namespace RabbitWings.UserAccount
         public void RegisterUser(User user, Action<User> onComplete, Action<Error> onError)
         {
             SetCache(GetID(user), user, (User usr) => {
+                User.Current = usr;
                 onComplete?.Invoke(user);
             }, onError);
         }
