@@ -4,7 +4,7 @@ namespace RabbitWings.Core
 {
 	public static class Constants
 	{
-		public const string SDK_VERSION = "1.1.0";
+		public const string SDK_VERSION = "1.1.1";
 
 		public const string DEFAULT_PROJECT_ID = "77640";
 		public const string DEFAULT_LOGIN_ID = "026201e3-7e40-11ea-a85b-42010aa80004";
@@ -31,9 +31,25 @@ namespace RabbitWings.Core
         public const string ATTRIBUTE_INVENTORY_SHOW_VALUE = "yes";
         public const string CURRENCY_VALUE_ATTRIBUTE_ID = "ris_credit_sell_value";
         public const string RIS_CURRENCY_SKU = "ris-credits";
+		public const string RIS_CURRENCY_NAME = "RIS Credits";
         public const string RIS_CURRENCY_VALUE_PREFIX = "ris_";
         public const string GOAL_ITEM_PREFIX = "goal_";
         public const string DEFAULT_DEBUG_PASSWORD = "asdf1234";
         public const string VCURRENCY_PACKAGE_SKU = "RISCurrency";
+		private static Dictionary<string, string> VCURENCY_SKU_TO_NAME_P;
+
+        public static Dictionary<string, string> VCURENCY_SKU_TO_NAME { 
+			get
+			{
+				if (VCURENCY_SKU_TO_NAME_P == null)
+				{
+					VCURENCY_SKU_TO_NAME_P = new Dictionary<string, string>
+					{
+						{ RIS_CURRENCY_SKU, RIS_CURRENCY_NAME }
+					};
+				}
+				return VCURENCY_SKU_TO_NAME_P;
+			}
+		}
     }
 }
