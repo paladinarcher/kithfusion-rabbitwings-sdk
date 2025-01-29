@@ -1,5 +1,6 @@
 using System;
 using RabbitWings.Core;
+using UnityEngine.Events;
 
 namespace RabbitWings.Inventory
 {
@@ -24,6 +25,7 @@ namespace RabbitWings.Inventory
 		public int quantity;
 		public int? remaining_uses;
 		public string instance_id;
+        protected InventorySellDescriptor sellDescriptor;
 
 		public VirtualItemType VirtualItemType
 		{
@@ -44,5 +46,72 @@ namespace RabbitWings.Inventory
 				}
 			}
 		}
-	}
+        public InventorySellDescriptor SellDescriptor()
+        {
+            return SellDescriptor(Constants.RIS_CURRENCY_SKU);
+        }
+        public InventorySellDescriptor SellDescriptor(string vcurrencySku)
+        {
+            if (sellDescriptor == null)
+            {
+                sellDescriptor = new InventorySellDescriptor();
+                sellDescriptor.item = this;
+                sellDescriptor.currenySku = vcurrencySku;
+                sellDescriptor.currenctName = Constants.VCURENCY_SKU_TO_NAME[vcurrencySku];
+                if (attributes == null || attributes.Length < 1)
+                {
+                    return sellDescriptor;
+                }
+                if (quantity < 1)
+                {
+                    return sellDescriptor;
+                }
+                int itemCurrencyValue = 0;
+                for (int i = 0; i < attributes.Length; i++)
+                {
+                    if (attributes[i].external_id == Constants.CURRENCY_VALUE_ATTRIBUTE_ID)
+                    {
+                        if (attributes[i].values.Length < 1)
+                        {
+                            break;
+                        }
+                        for (int j = 0; j < attributes[i].values.Length; j++)
+                        {
+                            //values are in the format "ris_#" where # is the numerical exchange value
+                            if (attributes[i].values[j].external_id.Contains(Constants.RIS_CURRENCY_VALUE_PREFIX))
+                            {
+                                if (Int32.TryParse(attributes[i].values[j].external_id.Substring(Constants.RIS_CURRENCY_VALUE_PREFIX.Length), out itemCurrencyValue))
+                                {
+                                    sellDescriptor.isSellable = true;
+                                    sellDescriptor.exchangeRate = itemCurrencyValue;
+                                    return sellDescriptor;
+                                }
+                            }
+                        }
+
+                        if (itemCurrencyValue == 0)
+                        {
+                            return sellDescriptor;
+                        }
+                    }
+                }
+            }
+            return sellDescriptor;
+        }
+    }
+
+    public class InventorySellDescriptor
+    {
+        public InventoryItem item;
+        public bool isSellable = false;
+        public string currenySku = Constants.RIS_CURRENCY_SKU;
+        public string currenctName = Constants.RIS_CURRENCY_NAME;
+        public int exchangeRate = 0;
+    }
+
+    [Serializable]
+    public class AuthInventoryItemEvent : UnityEvent<User>
+    {
+
+    }
 }
