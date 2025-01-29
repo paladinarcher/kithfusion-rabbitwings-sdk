@@ -17,5 +17,15 @@ namespace RabbitWings.Core
         public List<InventoryItem> inventoryItems = new List<InventoryItem>();
         public GoalItemManager goalItems = new GoalItemManager();
         public GoalStateSummary goalSummary = new GoalStateSummary(5);
+        public InventoryItems InventoryItems
+        {
+            get
+            {
+                return new InventoryItems
+                {
+                    items = inventoryItems.ToArray(),
+                };
+            }
+        }
     }
 }
