@@ -25,9 +25,12 @@ namespace RabbitWings.Goals
         }
         public GoalStateSummary(int initialCount)
         {
-            if (initialCount < 0)
+            if (initialCount > 0)
             {
                 states = new List<GoalIndexCountStatus>(initialCount);
+            } else
+            {
+                states = new List<GoalIndexCountStatus>();
             }
         }
 
