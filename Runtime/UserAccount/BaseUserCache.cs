@@ -8,15 +8,6 @@ namespace RabbitWings.UserAccount
 {
     public abstract class BaseUserCache : RestJsonCacheGeneric<User>
     {
-        public override string GetIDPrefix
-        {
-            get
-            {
-                Type t = typeof(User);
-                return t.Name;
-            }
-        }
-
         protected override string GetDefaultPath()
         {
             return "editUser";

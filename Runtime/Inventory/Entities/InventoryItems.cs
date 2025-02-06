@@ -10,6 +10,13 @@ namespace RabbitWings.Inventory
 		public InventoryItem[] items;
 	}
 
+    [Serializable]
+    public class InventoryItemCount
+    {
+        public int quantity;
+        public string sku;
+    }
+
 	[Serializable]
 	public class InventoryItem
 	{
@@ -22,7 +29,7 @@ namespace RabbitWings.Inventory
 		public StoreItemAttribute[] attributes;
 		public StoreItemGroup[] groups;
 		public string image_url;
-		public int quantity;
+        public int quantity;
 		public int? remaining_uses;
 		public string instance_id;
         protected InventorySellDescriptor sellDescriptor;
