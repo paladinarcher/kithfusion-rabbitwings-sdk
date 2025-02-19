@@ -62,23 +62,23 @@ namespace RabbitWings.Inventory
             }
         }
 
-        public static void Consume(InventoryItemCount item, Action onComplete, Action<Error> onError)
+        public static void Consume(InventoryItemCount item, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             InventoryItem i = new InventoryItem() { sku = item.sku, quantity = item.quantity };
             Consume(new List<InventoryItem> { i }, onComplete, onError);
         }
-        public static void Consume(InventoryItem item, Action onComplete, Action<Error> onError)
+        public static void Consume(InventoryItem item, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             Consume(new List<InventoryItem> { item }, onComplete, onError);
         }
 
-        public static void Consume(string sku, int quantity, Action onComplete, Action<Error> onError)
+        public static void Consume(string sku, int quantity, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             InventoryItem i = new InventoryItem() { sku = sku, quantity = quantity };
             Consume(new List<InventoryItem> { i }, onComplete, onError);
         }
 
-        public static void Consume(Dictionary<string, int> items, Action onComplete, Action<Error> onError)
+        public static void Consume(Dictionary<string, int> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             List<InventoryItem> list = new List<InventoryItem>(items.Count);
             foreach (KeyValuePair<string, int> item in items)
@@ -93,7 +93,7 @@ namespace RabbitWings.Inventory
             Consume(list, onComplete, onError);
         }
 
-        public static void Consume(List<InventoryItemCount> items, Action onComplete, Action<Error> onError)
+        public static void Consume(List<InventoryItemCount> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             List<InventoryItem> list = new List<InventoryItem>(items.Count);
             foreach (InventoryItemCount item in items)
@@ -107,7 +107,7 @@ namespace RabbitWings.Inventory
             }
             Consume(list, onComplete, onError);
         }
-        public static void Consume(List<InventoryItem> items, Action onComplete, Action<Error> onError)
+        public static void Consume(List<InventoryItem> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             if (User.Current == null || User.Current.id == null)
             {
@@ -159,23 +159,23 @@ namespace RabbitWings.Inventory
             DoTransaction(oc, onComplete, onError);
         }
 
-        public static void Sell(InventoryItemCount item, Action onComplete, Action<Error> onError)
+        public static void Sell(InventoryItemCount item, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             InventoryItem i = new InventoryItem() { sku = item.sku, quantity = item.quantity };
             Sell(new List<InventoryItem> { i }, onComplete, onError);
         }
-        public static void Sell(InventoryItem item, Action onComplete, Action<Error> onError)
+        public static void Sell(InventoryItem item, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             Sell(new List<InventoryItem> { item }, onComplete, onError);
         }
 
-        public static void Sell(string sku, int quantity, Action onComplete, Action<Error> onError)
+        public static void Sell(string sku, int quantity, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             InventoryItem i = new InventoryItem() { sku = sku, quantity = quantity };
             Sell(new List<InventoryItem> { i }, onComplete, onError);
         }
 
-        public static void Sell(Dictionary<string, int> items, Action onComplete, Action<Error> onError)
+        public static void Sell(Dictionary<string, int> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             List<InventoryItem> list = new List<InventoryItem>(items.Count);
             foreach (KeyValuePair<string, int> item in items)
@@ -190,7 +190,7 @@ namespace RabbitWings.Inventory
             Sell(list, onComplete, onError);
         }
 
-        public static void Sell(List<InventoryItemCount> items, Action onComplete, Action<Error> onError)
+        public static void Sell(List<InventoryItemCount> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             List<InventoryItem> list = new List<InventoryItem>(items.Count);
             foreach (InventoryItemCount item in items)
@@ -204,7 +204,7 @@ namespace RabbitWings.Inventory
             }
             Sell(list, onComplete, onError);
         }
-        public static void Sell(List<InventoryItem> items, Action onComplete, Action<Error> onError)
+        public static void Sell(List<InventoryItem> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             if (User.Current == null || User.Current.id == null)
             {
@@ -261,7 +261,7 @@ namespace RabbitWings.Inventory
             DoTransaction(oc, onComplete, onError);
         }
 
-        public static void Buy(string sku, int quantity, Action onComplete, Action<Error> onError)
+        public static void Buy(string sku, int quantity, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             PurchasableItem bi = ItemMapCache.ItemHolder.GetBundleBySku(sku);
             if (bi != null)
@@ -279,7 +279,7 @@ namespace RabbitWings.Inventory
             onError?.Invoke(new Error(ErrorType.Undefined, "", "", $"No bundle with the sku {sku} was found."));
             return;
         }
-        public static void Buy(Dictionary<string, int> items, Action onComplete, Action<Error> onError)
+        public static void Buy(Dictionary<string, int> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             bool foundValid = false;
             string errLines = "";
@@ -306,11 +306,11 @@ namespace RabbitWings.Inventory
             }
             Buy(list, onComplete, onError);
         }
-        public static void Buy(PurchasableItem item, Action onComplete, Action<Error> onError)
+        public static void Buy(PurchasableItem item, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             Buy(new List<PurchasableItem> { item }, onComplete, onError);
         }
-        public static void Buy(List<PurchasableItem> items, Action onComplete, Action<Error> onError)
+        public static void Buy(List<PurchasableItem> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             bool foundValid = false;
             string errLines = "";
@@ -366,21 +366,21 @@ namespace RabbitWings.Inventory
             DoTransaction(oc, onComplete, onError);
         }
 
-        public static void Give(InventoryItemCount item, Action onComplete, Action<Error> onError)
+        public static void Give(InventoryItemCount item, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             Give(item.sku, item.quantity, onComplete, onError);
         }
-        public static void Give(InventoryItem item, Action onComplete, Action<Error> onError)
+        public static void Give(InventoryItem item, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             Give(item.sku, item.quantity, onComplete, onError);
         }
 
-        public static void Give(string sku, int quantity, Action onComplete, Action<Error> onError)
+        public static void Give(string sku, int quantity, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             Give(new List<InventoryItemCount> { new InventoryItemCount { quantity = quantity, sku = sku } }, onComplete, onError);
         }
 
-        public static void Give(Dictionary<string, int> items, Action onComplete, Action<Error> onError)
+        public static void Give(Dictionary<string, int> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             List<InventoryItemCount> list = new List<InventoryItemCount>(items.Count);
             foreach(KeyValuePair<string, int> item in items)
@@ -389,7 +389,7 @@ namespace RabbitWings.Inventory
             }
             Give(list, onComplete, onError);
         }
-        public static void Give(List<InventoryItem> items, Action onComplete, Action<Error> onError)
+        public static void Give(List<InventoryItem> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             List<InventoryItemCount> list = new List<InventoryItemCount>(items.Count);
             foreach (InventoryItem item in items)
@@ -399,7 +399,7 @@ namespace RabbitWings.Inventory
             Give(list, onComplete, onError);
         }
 
-        public static void Give(List<InventoryItemCount> items, Action onComplete, Action<Error> onError)
+        public static void Give(List<InventoryItemCount> items, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
             if (User.Current == null || User.Current.id == null)
             {
@@ -429,7 +429,7 @@ namespace RabbitWings.Inventory
 
             DoTransaction(oc, onComplete, onError);
         }
-        public static void DoTransaction(OrderContent oc, Action onComplete, Action<Error> onError) {
+        public static void DoTransaction(OrderContent oc, Action<TransactionResponse> onComplete, Action<Error> onError) {
 
             string postUrl = new UrlBuilder($"{Url}/{BaseDirectory}")
                 .Build();
@@ -447,7 +447,7 @@ namespace RabbitWings.Inventory
                 postUrl,
                 oc,
                 headers,
-                () => { onComplete?.Invoke(); },
+                (TransactionResponse r) => { onComplete?.Invoke(r); },
                 onError,
                 ErrorGroup.CommonErrors);
         }
