@@ -11,24 +11,12 @@ namespace RabbitWings.Catalog
 	}
 
 	[Serializable]
-	public class BundleItem
-	{
-		public string sku;
-		public string name;
-		public StoreItemGroup[] groups;
-		public string description;
-		public StoreItemAttribute[] attributes;
-		public string type;
+	public class BundleItem : PurchasableItem
+    {
 		public string bundle_type;
-		public string image_url;
-		public bool is_free;
 		public bool can_be_bought;
-		public Price price;
 		public Price total_content_price;
-		public VirtualPrice[] virtual_prices;
 		public Content[] content;
-		public StoreItemPromotion[] promotions;
-		public StoreItemLimits limits;
 
 		[Serializable]
 		public class Content

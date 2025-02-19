@@ -41,7 +41,16 @@
 			};
 		}
 
-		public static WebRequestHeader JsonContentTypeHeader()
+        public static WebRequestHeader CurrentUser()
+        {
+            return new WebRequestHeader
+            {
+                Name = "x-user-id",
+                Value = (User.Current !=  null && User.Current.id != null ? User.Current.id : "NO_CURRENT_USER")
+            };
+        }
+
+        public static WebRequestHeader JsonContentTypeHeader()
 		{
 			return new WebRequestHeader {
 				Name = "Content-Type",

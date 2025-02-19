@@ -1,27 +1,40 @@
+using Newtonsoft.Json;
+using RabbitWings.Inventory;
 using System;
 
 namespace RabbitWings.Core
 {
 	[Serializable]
-	public class StoreItem
-	{
-		public string sku;
-		public string name;
-		public StoreItemGroup[] groups;
-		public StoreItemAttribute[] attributes;
-		public string type;
+	public class StoreItem : PurchasableItem
+    {
 		public string virtual_item_type;
-		public string description;
 		public string long_description;
-		public string image_url;
-		public bool is_free;
-		public Price price;
-		public VirtualPrice[] virtual_prices;
 		public InventoryOptions inventory_options;
 		public int order;
 		public MediaListItem[] media_list;
-		public StoreItemPromotion[] promotions;
-		public StoreItemLimits limits;
+
+		private InventoryItem invItm;
+
+		[JsonIgnore]
+		public InventoryItem InventoryItem
+		{
+			get
+			{
+				if (invItm == null) {
+					invItm = new InventoryItem();
+					invItm.type = type;
+					invItm.groups = groups;
+					invItm.attributes = attributes;
+					invItm.sku = sku;
+					invItm.name = name;
+					invItm.description = description;
+					invItm.image_url = image_url;
+					invItm.remaining_uses = 0;
+					invItm.virtual_item_type = virtual_item_type;
+				}
+				return invItm;
+			}
+		}
 
 		public VirtualItemType VirtualItemType
 		{

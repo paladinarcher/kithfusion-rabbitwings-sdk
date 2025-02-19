@@ -11,7 +11,7 @@ namespace RabbitWings.Inventory
     [Serializable]
     public class GoalItemManager
     {
-        public UnityEvent onInitialize;
+        [NonSerialized] public UnityEvent onInitialize;
 
         [JsonProperty]
         protected Dictionary<int, List<InventoryItem>> list;

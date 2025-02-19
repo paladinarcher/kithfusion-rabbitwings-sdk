@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using RabbitWings.Core;
 using UnityEngine.Events;
 
@@ -20,7 +21,7 @@ namespace RabbitWings.Inventory
 	[Serializable]
 	public class InventoryItem
 	{
-		public string sku;
+        public string sku;
 		public string name;
 		public string description;
 		//Public object attributes; Don't use it yet.
@@ -28,7 +29,7 @@ namespace RabbitWings.Inventory
 		public string virtual_item_type;
 		public StoreItemAttribute[] attributes;
 		public StoreItemGroup[] groups;
-		public string image_url;
+        public string image_url;
         public int quantity;
 		public int? remaining_uses;
 		public string instance_id;
@@ -63,8 +64,8 @@ namespace RabbitWings.Inventory
             {
                 sellDescriptor = new InventorySellDescriptor();
                 sellDescriptor.item = this;
-                sellDescriptor.currenySku = vcurrencySku;
-                sellDescriptor.currenctName = Constants.VCURENCY_SKU_TO_NAME[vcurrencySku];
+                sellDescriptor.currencySku = vcurrencySku;
+                sellDescriptor.currencyName = Constants.VCURENCY_SKU_TO_NAME[vcurrencySku];
                 if (attributes == null || attributes.Length < 1)
                 {
                     return sellDescriptor;
@@ -105,15 +106,160 @@ namespace RabbitWings.Inventory
             }
             return sellDescriptor;
         }
+
+        public bool MergeFrom(InventoryItem incoming)
+        {
+            if (this.sku != incoming.sku)
+            {
+                throw new ArgumentException($"Items are not of the same SKU: {incoming.sku} is not {this.sku}");
+            }
+            bool changed = false;
+            if (!string.IsNullOrEmpty(incoming.name) && this.name != incoming.name)
+            {
+                this.name = incoming.name;
+                changed = true;
+            }
+            if (!string.IsNullOrEmpty(incoming.description) && incoming.description != this.description)
+            {
+                if (this.description != "")
+                {
+                    this.description = incoming.description + this.description;
+                }
+                else
+                {
+                    this.description = incoming.description;
+                }
+                changed = true;
+            }
+            if (!string.IsNullOrEmpty(incoming.type) && this.type != incoming.type)
+            {
+                this.type = incoming.type;
+                changed = true;
+            }
+            if (!string.IsNullOrEmpty(incoming.virtual_item_type) && this.virtual_item_type != incoming.virtual_item_type)
+            {
+                this.virtual_item_type = incoming.virtual_item_type;
+                changed = true;
+            }
+            if (!string.IsNullOrEmpty(incoming.image_url) && incoming.image_url != this.image_url)
+            {
+                this.image_url = incoming.image_url;
+            }
+            if (incoming.quantity > 0 && incoming.quantity != this.quantity)
+            {
+                this.quantity = incoming.quantity;
+                changed = true;
+            }
+            if (incoming.remaining_uses != null && this.remaining_uses != incoming.remaining_uses)
+            {
+                this.remaining_uses = incoming.remaining_uses;
+                changed = true;
+            }
+            if (!string.IsNullOrEmpty(incoming.instance_id) && this.instance_id == incoming.instance_id)
+            {
+                this.instance_id = incoming.instance_id;
+                changed = true;
+            }
+            if (incoming.attributes != null)
+            {
+                List<StoreItemAttribute> atts = new List<StoreItemAttribute>();
+                foreach (StoreItemAttribute i in incoming.attributes)
+                {
+                    bool aFound = false;
+                    if (this.attributes != null)
+                    {
+                        foreach (StoreItemAttribute j in this.attributes)
+                        {
+                            if (i.name == j.name)
+                            {
+                                aFound = true;
+                                foreach (StoreItemAttribute.ValuePair p in i.values)
+                                {
+                                    bool valFound = false;
+                                    foreach (StoreItemAttribute.ValuePair q in j.values)
+                                    {
+                                        if (p.value == q.value)
+                                        {
+                                            valFound = true;
+                                        }
+                                    }
+                                    if (!valFound)
+                                    {
+                                        aFound = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (!aFound)
+                    {
+                        changed = true;
+                        atts.Add(i);
+                    }
+                }
+                if (atts.Count > 0)
+                {
+                    this.attributes = atts.ToArray();
+                }
+            }
+            if (incoming.groups != null)
+            {
+                List<StoreItemGroup> grps = new List<StoreItemGroup>();
+                foreach (StoreItemGroup i in incoming.groups)
+                {
+                    bool aFound = false;
+                    if (this.groups != null)
+                    {
+                        foreach (StoreItemGroup j in this.groups)
+                        {
+                            if (i.name == j.name && i.external_id == j.external_id)
+                            {
+                                aFound = true;
+                            }
+                        }
+                    }
+                    if (!aFound)
+                    {
+                        grps.Add(i);
+                        changed = true;
+                    }
+                }
+                if (grps.Count > 0)
+                {
+                    this.groups = grps.ToArray();
+                }
+            }
+            return changed;
+        }
     }
 
     public class InventorySellDescriptor
     {
         public InventoryItem item;
         public bool isSellable = false;
-        public string currenySku = Constants.RIS_CURRENCY_SKU;
-        public string currenctName = Constants.RIS_CURRENCY_NAME;
+        public string currencySku = Constants.RIS_CURRENCY_SKU;
+        public string currencyName = Constants.RIS_CURRENCY_NAME;
         public int exchangeRate = 0;
+
+        private Price price;
+
+        public Price Price
+        {
+            get
+            {
+                if (price == null) {
+                    if(item.sku == Constants.RIS_CURRENCY_SKU)
+                    {
+                        exchangeRate = 1;
+                    }
+                    price = new Price();
+                    price.amount = (exchangeRate).ToString();
+                    price.currency = currencySku;
+                    price.amount_without_discount = (exchangeRate).ToString();
+                }
+                return price;
+            }
+        }
     }
 
     [Serializable]

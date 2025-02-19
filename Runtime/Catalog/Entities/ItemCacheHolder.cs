@@ -21,5 +21,23 @@ namespace RabbitWings.Catalog
             bundleItemCache = new List<BundleItem>();
             GoalItems = new GoalItemManager();
         }
+
+        public InventoryItem GetItemBySKU(string sku)
+        {
+            foreach (InventoryItem item in inventoryCache)
+            {
+                if (item.sku == sku) return item;
+            }
+            return null;
+        }
+
+        public BundleItem GetBundleBySku(string sku)
+        {
+            foreach (BundleItem bi in bundleItemCache)
+            {
+                if (bi.sku == sku) return bi;
+            }
+            return null;
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace RabbitWings.Core
 	{
 		public string sku;
 		public int quantity;
-		public string is_free;
+		public string is_free; // yes or anything else
 		public Price price;
 	}
 }

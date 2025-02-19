@@ -62,7 +62,8 @@ namespace RabbitWings.Core
             List<WebRequestHeader> headers = new List<WebRequestHeader>()
             {
                 WebRequestHeader.AuthXApi(apiKey),
-                WebRequestHeader.JsonContentTypeHeader()
+                WebRequestHeader.JsonContentTypeHeader(),
+                WebRequestHeader.CurrentUser()
             };
 
             WebRequestHelper.Instance.GetRequest(
@@ -91,7 +92,8 @@ namespace RabbitWings.Core
             List<WebRequestHeader> headers = new List<WebRequestHeader>()
             {
                 WebRequestHeader.AuthXApi(apiKey),
-                WebRequestHeader.JsonContentTypeHeader()
+                WebRequestHeader.JsonContentTypeHeader(),
+                WebRequestHeader.CurrentUser()
             };
 
             WebRequestHelper.Instance.PostRequest(

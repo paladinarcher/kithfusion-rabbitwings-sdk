@@ -29,7 +29,7 @@ namespace RabbitWings.Core
 			{
 				result = JsonConvert.DeserializeObject<TData>(json, serializerSettings);
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				XDebug.LogWarning($"Deserialization failed for {typeof(TData)}");
 				result = null;

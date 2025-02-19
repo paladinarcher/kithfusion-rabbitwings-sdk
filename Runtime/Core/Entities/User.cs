@@ -14,18 +14,8 @@ namespace RabbitWings.Core
     {
         public static User Current { get; set; }
         public List<VirtualCurrencyBalance> vcurrencyBalances = new List<VirtualCurrencyBalance>();
-        public List<InventoryItem> inventoryItems = new List<InventoryItem>();
+        public Dictionary<string, int> itemCounts = new Dictionary<string, int>();
         public GoalItemManager goalItems = new GoalItemManager();
         public GoalStateSummary goalSummary = new GoalStateSummary(5);
-        public InventoryItems InventoryItems
-        {
-            get
-            {
-                return new InventoryItems
-                {
-                    items = inventoryItems.ToArray(),
-                };
-            }
-        }
     }
 }
