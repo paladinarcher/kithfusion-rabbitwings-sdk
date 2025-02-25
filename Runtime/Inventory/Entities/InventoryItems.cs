@@ -21,6 +21,21 @@ namespace RabbitWings.Inventory
 	[Serializable]
 	public class InventoryItem
 	{
+        public static void CopyTo(InventoryItem original, out InventoryItem copy)
+        {
+            copy = new InventoryItem();
+            copy.attributes = original.attributes;
+            copy.sku = original.sku;
+            copy.quantity = original.quantity;
+            copy.description = original.description;
+            copy.groups = original.groups;
+            copy.image_url = original.image_url;
+            copy.instance_id = original.instance_id;
+            copy.name = original.name;
+            copy.remaining_uses = original.remaining_uses;
+            copy.type = original.type;
+            copy.virtual_item_type = original.virtual_item_type;
+        }
         public string sku;
 		public string name;
 		public string description;
