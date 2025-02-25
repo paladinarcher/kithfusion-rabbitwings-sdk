@@ -97,6 +97,7 @@ namespace RabbitWings.Core
 
 		public UrlBuilder AddId(string value)
 		{
+			if(string.IsNullOrEmpty(value)) { return this; }
 			return AddParam("id", value);
 		}
 

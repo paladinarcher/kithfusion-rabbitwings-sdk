@@ -32,6 +32,7 @@ namespace RabbitWings.Core
 			catch (Exception e)
 			{
 				XDebug.LogWarning($"Deserialization failed for {typeof(TData)}");
+				XDebug.LogException(e);
 				result = null;
 			}
 

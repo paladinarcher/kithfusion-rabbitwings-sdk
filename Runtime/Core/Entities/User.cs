@@ -16,6 +16,6 @@ namespace RabbitWings.Core
         public List<VirtualCurrencyBalance> vcurrencyBalances = new List<VirtualCurrencyBalance>();
         public Dictionary<string, int> itemCounts = new Dictionary<string, int>();
         public GoalItemManager goalItems = new GoalItemManager();
-        public GoalStateSummary goalSummary = new GoalStateSummary(5);
+        public GoalStateSummary goals = new GoalStateSummary(1);
     }
 }

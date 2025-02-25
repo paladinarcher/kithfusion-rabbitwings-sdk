@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace RabbitWings.Core
@@ -20,5 +21,10 @@ namespace RabbitWings.Core
 		{
 			Debug.LogError($"{LOG_PREFIX} {message}");
 		}
-	}
+
+        public static void LogException(Exception e)
+        {
+			Debug.LogException(e);
+        }
+    }
 }

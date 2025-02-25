@@ -1,10 +1,18 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RabbitWings.Core
 {
 	public static class Constants
 	{
-		public const string SDK_VERSION = "1.1.14";
+		public static string SDK_VERSION
+		{
+			get
+			{
+				return sdkVersion;
+			}
+		}
+		private static string sdkVersion = "1.1.16";
 
 		public const string DEFAULT_PROJECT_ID = "77640";
 		public const string DEFAULT_LOGIN_ID = "026201e3-7e40-11ea-a85b-42010aa80004";

@@ -15,7 +15,7 @@ namespace RabbitWings.Inventory
         }
         protected string GetID(User current)
         {
-            return $"{GetIDPrefix}-{current.email}";
+            return $"{GetIDPrefix}-{current.email.ToLower()}";
         }
         public void GetCurrentUserInventory()
         {

@@ -27,21 +27,33 @@ namespace RabbitWings.Goals
         {
             if (initialCount > 0)
             {
-                states = new List<GoalIndexCountStatus>(initialCount);
+                states = new Dictionary<string, GoalIndexCountStatus>(initialCount);
             } else
             {
-                states = new List<GoalIndexCountStatus>();
+                states = new Dictionary<string, GoalIndexCountStatus>();
             }
         }
 
-        public List<GoalIndexCountStatus> states;
+        public Dictionary<string, GoalIndexCountStatus> states;
         public void SetState(GoalIndexCountStatus[] states)
         {
-            this.states = new List<GoalIndexCountStatus>(states);
+            this.states = new Dictionary<string, GoalIndexCountStatus>(states.Length);
+            foreach(GoalIndexCountStatus i in states)
+            {
+                this.states.Add(i.GoalIndex.ToString(), i);
+            }
+        }
+        public void SetState(Dictionary<string, GoalIndexCountStatus> states)
+        {
+            this.states = states;
         }
         public void SetState(List<GoalIndexCountStatus> states)
         {
-            this.states = states;
+            this.states = new Dictionary<string, GoalIndexCountStatus>(states.Count);
+            foreach (GoalIndexCountStatus i in states)
+            {
+                this.states.Add(i.GoalIndex.ToString(), i);
+            }
         }
 
         public bool Equals(GoalStateSummary other)
