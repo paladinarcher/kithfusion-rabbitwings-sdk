@@ -13,7 +13,7 @@ namespace RabbitWings.UserAccount
             return "editUser";
         }
 
-        protected string GetID(User current)
+        public string GetID(User current)
         {
             return $"{GetIDPrefix}-{current.email.ToLower()}";
         }
