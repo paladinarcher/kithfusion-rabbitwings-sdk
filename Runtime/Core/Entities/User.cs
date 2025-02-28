@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RabbitWings.Goals;
 using RabbitWings.Catalog;
+using System.Linq;
 
 namespace RabbitWings.Core
 {
@@ -94,9 +95,11 @@ namespace RabbitWings.Core
                 {
                     if (it.VirtualItemType == VirtualItemType.VirtualCurrency)
                     {
-                        if (update[i] == vcurrencyBalances[0].amount) { continue; }
-                        diff.Add(i, update[i] - vcurrencyBalances[0].amount);
-                        vcurrencyBalances[0].amount = update[i];
+                        VirtualCurrencyBalance v = vcurrencyBalances.First(x => x.sku == i);
+                        if(v == null) { continue; }
+                        if (update[i] == v.amount) { continue; }
+                        diff.Add(i, update[i] - v.amount);
+                        v.amount = update[i];
                         continue;
                     }
                     if(it.VirtualItemType == VirtualItemType.Hint)
