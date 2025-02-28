@@ -30,7 +30,7 @@ namespace RabbitWings.Goals
             {
                 if (baseDirectory == null)
                 {
-                    baseDirectory = "goal";
+                    baseDirectory = "user/goals";
                 }
                 return baseDirectory;
             }

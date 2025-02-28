@@ -10,7 +10,7 @@ namespace RabbitWings.UserAccount
     {
         protected override string GetDefaultPath()
         {
-            return "editUser";
+            return "user";
         }
 
         public string GetID(User current)

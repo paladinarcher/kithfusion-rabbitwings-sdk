@@ -12,7 +12,7 @@ namespace RabbitWings.Core
 				return sdkVersion;
 			}
 		}
-		private static string sdkVersion = "1.1.18";
+		private static string sdkVersion = "1.1.19";
 
 		public const string DEFAULT_PROJECT_ID = "77640";
 		public const string DEFAULT_LOGIN_ID = "026201e3-7e40-11ea-a85b-42010aa80004";
@@ -42,6 +42,7 @@ namespace RabbitWings.Core
 		public const string RIS_CURRENCY_NAME = "RIS Credits";
         public const string RIS_CURRENCY_VALUE_PREFIX = "ris_";
         public const string GOAL_ITEM_PREFIX = "goal_";
+		public const string GOAL_ITEM_ORDER_PREFIX = "goal_order_";
         public const string DEFAULT_DEBUG_PASSWORD = "asdf1234";
         public const string VCURRENCY_PACKAGE_SKU = "RISCurrency";
 		private static Dictionary<string, string> VCURENCY_SKU_TO_NAME_P;

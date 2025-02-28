@@ -57,18 +57,65 @@ namespace RabbitWings.Inventory
 				if (!string.IsNullOrEmpty(type) && type.Equals("virtual_currency"))
 					return VirtualItemType.VirtualCurrency;
 
-				if (string.IsNullOrEmpty(virtual_item_type))
-					return VirtualItemType.None;
+                if (!string.IsNullOrEmpty(virtual_item_type))
+                {
+                    switch (virtual_item_type)
+                    {
+                        case "consumable": return VirtualItemType.Consumable;
+                        case "non_consumable": return VirtualItemType.NonConsumable;
+                        case "non_renewing_subscription": return VirtualItemType.NonRenewingSubscription;
+                    }
+                }
 
-				switch (virtual_item_type)
-				{
-					case "consumable": return VirtualItemType.Consumable;
-					case "non_consumable": return VirtualItemType.NonConsumable;
-					case "non_renewing_subscription": return VirtualItemType.NonRenewingSubscription;
-					default: return VirtualItemType.None;
-				}
-			}
+                for (int i = 0; i < attributes.Length; i++)
+                {
+                    if (attributes[i].external_id == Constants.ATTRIBUTE_GOAL_ITEM)
+                    {
+                        return VirtualItemType.Hint;
+                    }
+                }
+
+                return VirtualItemType.None;
+            }
 		}
+
+        public int GoalID
+        {
+            get
+            {
+                if(VirtualItemType != VirtualItemType.Hint)
+                {
+                    return -1;
+                }
+                for (int i = 0; i < attributes.Length; i++)
+                {
+                    if (attributes[i].external_id == Constants.ATTRIBUTE_GOAL_ITEM)
+                    {
+                        return int.Parse(attributes[i].values[0].value.Replace(Constants.GOAL_ITEM_PREFIX, ""));
+                    }
+                }
+                return -1;
+            }
+        }
+
+        public int GoalOrder
+        {
+            get
+            {
+                if (VirtualItemType != VirtualItemType.Hint)
+                {
+                    return -1;
+                }
+                for (int i = 0; i < attributes.Length; i++)
+                {
+                    if (attributes[i].external_id == Constants.ATTRIBUTE_GOAL_ITEM_ORDER)
+                    {
+                        return int.Parse(attributes[i].values[0].value.Replace(Constants.GOAL_ITEM_ORDER_PREFIX, ""));
+                    }
+                }
+                return -1;
+            }
+        }
         public InventorySellDescriptor SellDescriptor()
         {
             return SellDescriptor(Constants.RIS_CURRENCY_SKU);

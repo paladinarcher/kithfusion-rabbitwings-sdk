@@ -43,10 +43,15 @@
 
         public static WebRequestHeader CurrentUser()
         {
+			return AddUser(User.Current);
+        }
+
+        public static WebRequestHeader AddUser(User usr)
+        {
             return new WebRequestHeader
             {
                 Name = "x-user-id",
-                Value = (User.Current !=  null && User.Current.id != null ? User.Current.id : "NO_CURRENT_USER")
+                Value = (usr != null && usr.id != null ? usr.id : "NO_CURRENT_USER")
             };
         }
 

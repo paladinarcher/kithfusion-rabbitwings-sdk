@@ -28,5 +28,10 @@ namespace RabbitWings.UserAccount
                 onComplete?.Invoke(User.Current);
             }, onError);
         }
+
+        protected override string GetDefaultPath()
+        {
+            return base.GetDefaultPath() + "/update";
+        }
     }
 }

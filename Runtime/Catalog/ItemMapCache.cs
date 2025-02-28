@@ -10,6 +10,7 @@ namespace RabbitWings.Catalog
     {
         public string MainItemCacheName = "MainItemCacheMap";
         public static ItemCacheMapHolder ItemHolder { get; set; }
+        public static event Action OnItemHolderLoad;
 
         public void SetCache(Action<ItemCacheMapHolder> onComplete, Action<Error> onError)
         {
@@ -25,7 +26,7 @@ namespace RabbitWings.Catalog
         public void GetCache(Action<ItemCacheMapHolder> onComplete, Action<Error> onError)
         {
             GetCache(MainItemCacheName, (ItemCacheMapHolder i) => {
-                ItemHolder = i; onComplete.Invoke(i);
+                ItemHolder = i; OnItemHolderLoad?.Invoke(); onComplete?.Invoke(i);
             }, onError);
         }
     }

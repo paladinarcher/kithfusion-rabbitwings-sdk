@@ -35,6 +35,7 @@ namespace RabbitWings.Goals
         }
 
         public Dictionary<string, GoalIndexCountStatus> states;
+        public event Action<Dictionary<string, GoalIndexCountStatus>> OnStatesUpdated;
         public void SetState(GoalIndexCountStatus[] states)
         {
             this.states = new Dictionary<string, GoalIndexCountStatus>(states.Length);
@@ -59,6 +60,27 @@ namespace RabbitWings.Goals
         public bool Equals(GoalStateSummary other)
         {
             return true;
+        }
+
+        public Dictionary<string, GoalIndexCountStatus> UpdateFrom(GoalStateSummary gs)
+        {
+            Dictionary<string, GoalIndexCountStatus> diff = new Dictionary<string, GoalIndexCountStatus>();
+            foreach(string i in gs.states.Keys)
+            {
+                if (!states.ContainsKey(i))
+                {
+                    diff.Add(i, gs.states[i]);
+                    states.Add(i, gs.states[i]);
+                    continue;
+                }
+                if (states[i].Count != gs.states[i].Count || states[i].state != gs.states[i].state)
+                {
+                    states[i] = gs.states[i];
+                    diff.Add(i, gs.states[i]);
+                }
+            }
+
+            return diff;
         }
     }
 }

@@ -35,6 +35,20 @@ namespace RabbitWings.Inventory
                 return baseDirectory;
             }
         }
+        public static string BaseUserItemsDirectory
+        {
+            get
+            {
+                return "user/items";
+            }
+        }
+        public static string BaseUserTotalsDirectory
+        {
+            get
+            {
+                return $"{BaseDirectory}/counts";
+            }
+        }
 
         public static void Consume(InventoryItemCount item, Action<TransactionResponse> onComplete, Action<Error> onError)
         {
@@ -403,6 +417,50 @@ namespace RabbitWings.Inventory
 
             DoTransaction(oc, onComplete, onError);
         }
+        public static void RefreshTotals(Action<TransactionResponse> onSuccess, Action<Error> onError)
+        {
+            string getUrl = new UrlBuilder($"{Url}/{BaseUserTotalsDirectory}").Build();
+
+            List<WebRequestHeader> headers = new List<WebRequestHeader>()
+            {
+                WebRequestHeader.AuthXApi(ApiKey),
+                WebRequestHeader.JsonContentTypeHeader(),
+                WebRequestHeader.CurrentUser()
+            };
+
+            WebRequestHelper.Instance.GetRequest(
+                SdkType.Login,
+                getUrl,
+                headers,
+                (TransactionResponse r) => {
+                    User.UpdateTotalCounts(r.totalCounts, true);
+                    onSuccess?.Invoke(r);
+                },
+                onError,
+                ErrorGroup.CommonErrors);
+        }
+        public static void RefreshItems(Action<TransactionResponse> onSuccess, Action<Error> onError)
+        {
+            string getUrl = new UrlBuilder($"{Url}/{BaseUserItemsDirectory}").Build();
+
+            List<WebRequestHeader> headers = new List<WebRequestHeader>()
+            {
+                WebRequestHeader.AuthXApi(ApiKey),
+                WebRequestHeader.JsonContentTypeHeader(),
+                WebRequestHeader.CurrentUser()
+            };
+
+            WebRequestHelper.Instance.GetRequest(
+                SdkType.Login,
+                getUrl,
+                headers,
+                (TransactionResponse r) => {
+                    User.Current.UpdateItems(r.inventory, true);
+                    onSuccess?.Invoke(r);
+                },
+                onError,
+                ErrorGroup.CommonErrors);
+        }
         public static void DoTransaction(OrderContent oc, Action<TransactionResponse> onComplete, Action<Error> onError) {
 
             string postUrl = new UrlBuilder($"{Url}/{BaseDirectory}")
@@ -421,7 +479,11 @@ namespace RabbitWings.Inventory
                 postUrl,
                 oc,
                 headers,
-                (TransactionResponse r) => { onComplete?.Invoke(r); },
+                (TransactionResponse r) => {
+                    User.UpdateTotalCounts(r.totalCounts);
+                    User.Current.UpdateItems(r.inventory);
+                    onComplete?.Invoke(r);
+                },
                 onError,
                 ErrorGroup.CommonErrors);
         }

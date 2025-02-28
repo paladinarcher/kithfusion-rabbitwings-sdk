@@ -34,7 +34,7 @@ namespace RabbitWings.UserAccount
 
         protected override string GetDefaultPath()
         {
-            return "register";
+            return base.GetDefaultPath()+"/register";
         }
     }
 }

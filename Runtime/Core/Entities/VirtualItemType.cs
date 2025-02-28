@@ -6,6 +6,7 @@ namespace RabbitWings.Core
 		Consumable,
 		NonConsumable,
 		NonRenewingSubscription,
-		VirtualCurrency
+		VirtualCurrency,
+		Hint
 	}
 }
