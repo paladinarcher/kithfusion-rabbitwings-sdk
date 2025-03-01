@@ -19,7 +19,7 @@ namespace RabbitWings.Core
             get { return _current; } 
             set {
                 _current = value;
-                OnCurrentUserLoggedIn.Invoke(_current);
+                OnCurrentUserLoggedIn?.Invoke(_current);
             }
         }
         public static event Action<User> OnCurrentUserLoggedIn;

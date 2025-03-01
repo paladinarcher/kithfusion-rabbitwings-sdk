@@ -28,7 +28,7 @@ namespace RabbitWings.UserAccount
         {
             SetCache(GetID(user), user, (User usr) => {
                 User.Current = usr;
-                onComplete?.Invoke(user);
+                onComplete?.Invoke(usr);
             }, onError);
         }
 
