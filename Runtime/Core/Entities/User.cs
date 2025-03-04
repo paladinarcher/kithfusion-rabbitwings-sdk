@@ -73,7 +73,25 @@ namespace RabbitWings.Core
             Dictionary<string, int> diff = UpdateDiffItems(newItems, fullRefresh);
             OnItemsUpdated?.Invoke(diff);
         }
+        public void UpdateCurrency(int newBalance)
+        {
+            if(vcurrencyBalances.Count == 0)
+            {
+                vcurrencyBalances.Add(new VirtualCurrencyBalance()
+                {
+                    sku = Constants.RIS_CURRENCY_SKU,
+                    name = Constants.RIS_CURRENCY_NAME,
+                    amount = 0
+                });
+            }
+            if (vcurrencyBalances[0].amount != newBalance)
+            {
+                vcurrencyBalances[0].amount = newBalance;
+                OnCurrencyUpdated?.Invoke(newBalance);
+            }
+        }
         public event Action<Dictionary<string, int>> OnItemsUpdated;
+        public event Action<int> OnCurrencyUpdated;
         public List<VirtualCurrencyBalance> vcurrencyBalances = new List<VirtualCurrencyBalance>();
         public Dictionary<string, int> itemCounts = new Dictionary<string, int>();
         public GoalItemManager goalItems = new GoalItemManager();

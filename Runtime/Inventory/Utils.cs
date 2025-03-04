@@ -482,6 +482,7 @@ namespace RabbitWings.Inventory
                 (TransactionResponse r) => {
                     User.UpdateTotalCounts(r.totalCounts);
                     User.Current.UpdateItems(r.inventory);
+                    User.Current.UpdateCurrency(r.vcurrencyBalance);
                     onComplete?.Invoke(r);
                 },
                 onError,

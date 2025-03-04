@@ -10,5 +10,6 @@ namespace RabbitWings.Core
     {
         public Dictionary<string, int> totalCounts;
         public Dictionary<string, int> inventory;
+        public int vcurrencyBalance;
     }
 }
