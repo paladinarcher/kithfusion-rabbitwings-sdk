@@ -15,6 +15,7 @@ namespace RabbitWings.Core
         public string description;
         public string image_url;
         public bool is_free;
+        public bool hidden = false;
         public Price price;
         public VirtualPrice[] virtual_prices;
         public StoreItemPromotion[] promotions;
