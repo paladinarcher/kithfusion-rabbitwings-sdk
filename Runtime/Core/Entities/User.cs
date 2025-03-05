@@ -113,16 +113,12 @@ namespace RabbitWings.Core
                 {
                     if (it.VirtualItemType == VirtualItemType.VirtualCurrency)
                     {
-                        VirtualCurrencyBalance v = vcurrencyBalances.First(x => x.sku == i);
-                        if(v == null) { continue; }
-                        if (update[i] == v.amount) { continue; }
-                        diff.Add(i, update[i] - v.amount);
-                        v.amount = update[i];
                         continue;
                     }
                     if(it.VirtualItemType == VirtualItemType.Hint)
                     {
                         goalItems.AddItem(it.GoalID, it);
+                        continue;
                     }
                 }
                 if (!itemCounts.ContainsKey(i))
