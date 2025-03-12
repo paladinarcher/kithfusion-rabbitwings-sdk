@@ -1,4 +1,5 @@
 using RabbitWings.Core;
+using RabbitWings.Inventory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +27,15 @@ namespace RabbitWings.Catalog
         public void GetCache(Action<ItemCacheMapHolder> onComplete, Action<Error> onError)
         {
             GetCache(MainItemCacheName, (ItemCacheMapHolder i) => {
-                ItemHolder = i; OnItemHolderLoad?.Invoke(); onComplete?.Invoke(i);
+                ItemHolder = i;
+                if (ItemHolder.GoalItems.Count > 0) ItemHolder.GoalItems = new GoalItemManager();
+                foreach (StoreItem item in ItemHolder.storeItemCache.Values)
+                {
+                    if(item.VirtualItemType != VirtualItemType.Hint) { continue; }
+                    InventoryItem it = item.InventoryItem;
+                    ItemHolder.GoalItems.AddItem(it.GoalID, it);
+                }
+                OnItemHolderLoad?.Invoke(); onComplete?.Invoke(i);
             }, onError);
         }
     }

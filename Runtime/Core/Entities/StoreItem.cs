@@ -39,18 +39,32 @@ namespace RabbitWings.Core
 		public VirtualItemType VirtualItemType
 		{
 			get
-			{
-				if (string.IsNullOrEmpty(virtual_item_type))
-					return VirtualItemType.None;
+            {
+                if (!string.IsNullOrEmpty(type) && type.Equals("virtual_currency"))
+                    return VirtualItemType.VirtualCurrency;
 
-				switch (virtual_item_type)
-				{
-					case "consumable": return VirtualItemType.Consumable;
-					case "non_consumable": return VirtualItemType.NonConsumable;
-					case "non_renewing_subscription": return VirtualItemType.NonRenewingSubscription;
-					default: return VirtualItemType.None;
-				}
-			}
+                if (attributes != null)
+                {
+                    for (int i = 0; i < attributes.Length; i++)
+                    {
+                        if (attributes[i].external_id.StartsWith(Constants.ATTRIBUTE_GOAL_ITEM))
+                        {
+                            return VirtualItemType.Hint;
+                        }
+                    }
+                }
+                if (!string.IsNullOrEmpty(virtual_item_type))
+                {
+                    switch (virtual_item_type)
+                    {
+                        case "consumable": return VirtualItemType.Consumable;
+                        case "non_consumable": return VirtualItemType.NonConsumable;
+                        case "non_renewing_subscription": return VirtualItemType.NonRenewingSubscription;
+                        case "hint": return VirtualItemType.Hint;
+                    }
+                }
+                return VirtualItemType.None;
+            }
 		}
 
 		[Serializable]

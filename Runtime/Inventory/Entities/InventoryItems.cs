@@ -58,6 +58,16 @@ namespace RabbitWings.Inventory
 				if (!string.IsNullOrEmpty(type) && type.Equals("virtual_currency"))
 					return VirtualItemType.VirtualCurrency;
 
+                if (attributes != null)
+                {
+                    for (int i = 0; i < attributes.Length; i++)
+                    {
+                        if (attributes[i].external_id.StartsWith(Constants.ATTRIBUTE_GOAL_ITEM))
+                        {
+                            return VirtualItemType.Hint;
+                        }
+                    }
+                }
                 if (!string.IsNullOrEmpty(virtual_item_type))
                 {
                     switch (virtual_item_type)
@@ -65,14 +75,7 @@ namespace RabbitWings.Inventory
                         case "consumable": return VirtualItemType.Consumable;
                         case "non_consumable": return VirtualItemType.NonConsumable;
                         case "non_renewing_subscription": return VirtualItemType.NonRenewingSubscription;
-                    }
-                }
-
-                for (int i = 0; i < attributes.Length; i++)
-                {
-                    if (attributes[i].external_id == Constants.ATTRIBUTE_GOAL_ITEM)
-                    {
-                        return VirtualItemType.Hint;
+                        case "hint": return VirtualItemType.Hint;
                     }
                 }
 
@@ -90,11 +93,12 @@ namespace RabbitWings.Inventory
                 }
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (attributes[i].external_id == Constants.ATTRIBUTE_GOAL_ITEM)
+                    if (attributes[i].external_id.StartsWith(Constants.ATTRIBUTE_GOAL_ITEM) && !attributes[i].external_id.StartsWith(Constants.ATTRIBUTE_GOAL_ITEM_ORDER))
                     {
-                        return int.Parse(attributes[i].values[0].value.Replace(Constants.GOAL_ITEM_PREFIX, ""));
+                        return int.Parse(attributes[i].values[0].external_id.Replace(Constants.GOAL_ITEM_PREFIX, ""));
                     }
                 }
+                XDebug.LogError($"NO GOAL ID PRESENT! {sku}.");
                 return -1;
             }
         }
@@ -109,11 +113,12 @@ namespace RabbitWings.Inventory
                 }
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (attributes[i].external_id == Constants.ATTRIBUTE_GOAL_ITEM_ORDER)
+                    if (attributes[i].external_id.StartsWith(Constants.ATTRIBUTE_GOAL_ITEM_ORDER))
                     {
-                        return int.Parse(attributes[i].values[0].value.Replace(Constants.GOAL_ITEM_ORDER_PREFIX, ""));
+                        return int.Parse(attributes[i].values[0].external_id.Replace(Constants.GOAL_ITEM_ORDER_PREFIX, ""));
                     }
                 }
+                XDebug.LogError($"NO GOAL ORDER PRESENT! {sku}.");
                 return -1;
             }
         }

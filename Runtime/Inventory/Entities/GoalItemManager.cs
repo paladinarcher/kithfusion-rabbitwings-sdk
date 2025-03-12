@@ -26,6 +26,14 @@ namespace RabbitWings.Inventory
             onInitialize?.Invoke();
         }
 
+        public int Count
+        {
+            get
+            {
+                return list.Count;
+            }
+        }
+
         public List<InventoryItem> GetItems(int goalId)
         {
             if (!list.ContainsKey(goalId)) { list.Add(goalId, new List<InventoryItem>()); }
