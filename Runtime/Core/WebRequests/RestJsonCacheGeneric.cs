@@ -14,9 +14,35 @@ namespace RabbitWings.Core
         public string prodApiKey;
         public string devApiKey;
 
-        protected string apiKey;
+        public string Url
+        {
+            get
+            {
+                if (GlobalSettings.Instance.IsProd)
+                {
+                    return string.IsNullOrEmpty(prodUrl) ? GlobalSettings.Instance.DefaultProdUrl : prodUrl;
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(devUrl) ? GlobalSettings.Instance.DefaultDevUrl : devUrl;
+                }
+            }
+        }
 
-        protected string url;
+        public string ApiKey
+        {
+            get
+            {
+                if (GlobalSettings.Instance.IsProd)
+                {
+                    return string.IsNullOrEmpty(prodApiKey) ? GlobalSettings.Instance.DefaultProdApiKey : prodApiKey;
+                }
+                else
+                {
+                    return string.IsNullOrEmpty(devApiKey) ? GlobalSettings.Instance.DefaultDevApiKey : devApiKey;
+                }
+            }
+        }
 
         protected Coroutine runner;
 
@@ -24,16 +50,6 @@ namespace RabbitWings.Core
 
         protected virtual void Awake()
         {
-            if (GlobalSettings.Instance.IsProd)
-            {
-                url = string.IsNullOrEmpty(prodUrl) ? GlobalSettings.Instance.DefaultProdUrl : prodUrl;
-                apiKey = string.IsNullOrEmpty(prodApiKey) ? GlobalSettings.Instance.DefaultProdApiKey : prodApiKey;
-            }
-            else
-            {
-                url = string.IsNullOrEmpty(devUrl) ? GlobalSettings.Instance.DefaultDevUrl : devUrl;
-                apiKey = string.IsNullOrEmpty(devApiKey) ? GlobalSettings.Instance.DefaultDevApiKey : devApiKey;
-            }
         }
         protected virtual void Start()
         {
@@ -54,14 +70,14 @@ namespace RabbitWings.Core
 
         public void GetCache(string key, Action<T> callback, Action<Error> onError)
         {
-            string getUrl = new UrlBuilder($"{url}/{GetDefaultPath()}")
+            string getUrl = new UrlBuilder($"{Url}/{GetDefaultPath()}")
                 .AddId(key)
                 .AddType(ObjectType.Name)
                 .Build();
 
             List<WebRequestHeader> headers = new List<WebRequestHeader>()
             {
-                WebRequestHeader.AuthXApi(apiKey),
+                WebRequestHeader.AuthXApi(ApiKey),
                 WebRequestHeader.JsonContentTypeHeader(),
                 WebRequestHeader.CurrentUser()
             };
@@ -86,12 +102,12 @@ namespace RabbitWings.Core
 
         public void SetCache(IdObjectReference<T> myObject, Action<T> onCompleted, Action<Error> onError)
         {
-            string postUrl = new UrlBuilder($"{url}/{GetDefaultPath()}")
+            string postUrl = new UrlBuilder($"{Url}/{GetDefaultPath()}")
                 .Build();
 
             List<WebRequestHeader> headers = new List<WebRequestHeader>()
             {
-                WebRequestHeader.AuthXApi(apiKey),
+                WebRequestHeader.AuthXApi(ApiKey),
                 WebRequestHeader.JsonContentTypeHeader(),
                 WebRequestHeader.CurrentUser()
             };
