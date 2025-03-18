@@ -24,8 +24,8 @@ namespace RabbitWings.Core
         {
             get; set;
         } = false;
-        public string DefaultProdUrl { get; set; } = "https://7ex64pnyi7.execute-api.us-east-2.amazonaws.com/prod/rabbit-wings";
-        public string DefaultDevUrl { get; set; } = "https://7ex64pnyi7.execute-api.us-east-2.amazonaws.com/dev/rabbit-wings";
+        public string DefaultProdUrl { get; set; } = "https://nr6y7hmhaj.execute-api.us-east-2.amazonaws.com/prod/rabbit-wings";
+        public string DefaultDevUrl { get; set; } = "https://nr6y7hmhaj.execute-api.us-east-2.amazonaws.com/dev/rabbit-wings";
         public string DefaultProdApiKey { get; set; } = "MakeThesesRabbitsFly";
         public string DefaultDevApiKey { get; set; } = "MakeThesesRabbitsFly";
     }
