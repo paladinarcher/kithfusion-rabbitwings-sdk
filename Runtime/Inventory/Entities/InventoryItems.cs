@@ -49,6 +49,7 @@ namespace RabbitWings.Inventory
 		public int? remaining_uses;
 		public string instance_id;
         public bool hidden = false;
+        public bool syncToTeam = false;
         protected InventorySellDescriptor sellDescriptor;
 
 		public VirtualItemType VirtualItemType
