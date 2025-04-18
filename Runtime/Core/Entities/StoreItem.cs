@@ -33,6 +33,7 @@ namespace RabbitWings.Core
 					invItm.image_url = image_url;
 					invItm.remaining_uses = 0;
 					invItm.syncToTeam = syncToTeam;
+					invItm.quantity = 0;
 					invItm.virtual_item_type = virtual_item_type;
 				}
 				return invItm;
