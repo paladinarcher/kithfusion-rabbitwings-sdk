@@ -9,7 +9,9 @@ namespace RabbitWings.Core
     {
 		public string virtual_item_type;
 		public string long_description;
-		public InventoryOptions inventory_options;
+		public bool syncToTeam = false;
+
+        public InventoryOptions inventory_options;
 		public int order;
 		public MediaListItem[] media_list;
 
@@ -30,6 +32,7 @@ namespace RabbitWings.Core
 					invItm.description = description;
 					invItm.image_url = image_url;
 					invItm.remaining_uses = 0;
+					invItm.syncToTeam = syncToTeam;
 					invItm.virtual_item_type = virtual_item_type;
 				}
 				return invItm;
