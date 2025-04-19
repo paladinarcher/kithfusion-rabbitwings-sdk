@@ -35,6 +35,7 @@ namespace RabbitWings.Inventory
             copy.remaining_uses = original.remaining_uses;
             copy.type = original.type;
             copy.virtual_item_type = original.virtual_item_type;
+            copy.syncToTeam = original.syncToTeam;
         }
         public string sku;
 		public string name;
@@ -297,6 +298,10 @@ namespace RabbitWings.Inventory
                 {
                     this.groups = grps.ToArray();
                 }
+            }
+            if (incoming.syncToTeam != syncToTeam) {
+                this.syncToTeam = incoming.syncToTeam;
+                changed = true;
             }
             return changed;
         }
