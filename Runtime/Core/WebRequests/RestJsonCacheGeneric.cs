@@ -13,6 +13,7 @@ namespace RabbitWings.Core
         public string devUrl;
         public string prodApiKey;
         public string devApiKey;
+        public bool Pulling { get; protected set; } = false;
 
         public string Url
         {
@@ -81,12 +82,12 @@ namespace RabbitWings.Core
                 WebRequestHeader.JsonContentTypeHeader(),
                 WebRequestHeader.CurrentUser()
             };
-
+            Pulling = true;
             WebRequestHelper.Instance.GetRequest(
                 SdkType.Login,
                 getUrl,
                 headers,
-                (IdObjectReference<T> r) => { callback.Invoke(r.myObject); },
+                (IdObjectReference<T> r) => { callback.Invoke(r.myObject); Pulling = false; },
                 onError,
                 ErrorGroup.CommonErrors);
         }

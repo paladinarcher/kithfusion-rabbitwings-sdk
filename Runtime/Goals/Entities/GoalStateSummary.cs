@@ -1,3 +1,4 @@
+using RabbitWings.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace RabbitWings.Goals
 {
     [Serializable]
-    public class GoalStateSummary : IEquatable<GoalStateSummary>
+    public class GoalStateSummary : ByMissionAndNetDataDictionary<GoalIndexCountStatus>
     {
         public static GoalStateSummary Generate(GoalIndexCountStatus[] states)
         {
@@ -20,40 +21,34 @@ namespace RabbitWings.Goals
             s.SetState(states);
             return s;
         }
+
         public GoalStateSummary() : this(1)
         {
         }
         public GoalStateSummary(int initialCount)
         {
-            if (initialCount > 0)
-            {
-                states = new Dictionary<string, GoalIndexCountStatus>(initialCount);
-            } else
-            {
-                states = new Dictionary<string, GoalIndexCountStatus>();
-            }
+            this.initialSize = initialCount;
         }
-
-        public Dictionary<string, GoalIndexCountStatus> states;
         public event Action<Dictionary<string, GoalIndexCountStatus>> OnStatesUpdated;
         public void SetState(GoalIndexCountStatus[] states)
         {
-            this.states = new Dictionary<string, GoalIndexCountStatus>(states.Length);
             foreach(GoalIndexCountStatus i in states)
             {
-                this.states.Add(i.GoalIndex.ToString(), i);
+                Add(i);
             }
         }
         public void SetState(Dictionary<string, GoalIndexCountStatus> states)
         {
-            this.states = states;
+            foreach(GoalIndexCountStatus i in states.Values)
+            {
+                Add(i);
+            }
         }
         public void SetState(List<GoalIndexCountStatus> states)
         {
-            this.states = new Dictionary<string, GoalIndexCountStatus>(states.Count);
             foreach (GoalIndexCountStatus i in states)
             {
-                this.states.Add(i.GoalIndex.ToString(), i);
+                Add(i);
             }
         }
 
@@ -65,22 +60,37 @@ namespace RabbitWings.Goals
         public Dictionary<string, GoalIndexCountStatus> UpdateFrom(GoalStateSummary gs)
         {
             Dictionary<string, GoalIndexCountStatus> diff = new Dictionary<string, GoalIndexCountStatus>();
-            foreach(string i in gs.states.Keys)
+            foreach(string i in gs.Data.Keys)
             {
-                if (!states.ContainsKey(i))
+                if (!Data.ContainsKey(i))
                 {
-                    diff.Add(i, gs.states[i]);
-                    states.Add(i, gs.states[i]);
+                    diff.Add(i, gs.Data[i]);
+                    Add(gs.Data[i]);
                     continue;
                 }
-                if (states[i].Count != gs.states[i].Count || states[i].state != gs.states[i].state)
-                {
-                    states[i] = gs.states[i];
-                    diff.Add(i, gs.states[i]);
+                bool changed = Merge(Data[i], gs.Data[i]);
+                if (changed) {
+                    diff.Add(i, gs.Data[i]);
                 }
             }
 
             return diff;
+        }
+
+        public override bool Merge(GoalIndexCountStatus existingItem, GoalIndexCountStatus newItem)
+        {
+            bool changed = false;
+            if (existingItem.Count != newItem.Count)
+            {
+                existingItem.Count = newItem.Count;
+                changed = true;
+            }
+            if (existingItem.state != newItem.state)
+            {
+                existingItem.state = newItem.state;
+                changed = true;
+            }
+            return changed;
         }
     }
 }

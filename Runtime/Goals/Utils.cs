@@ -63,8 +63,8 @@ namespace RabbitWings.Goals
         }
         public static void SetState(GoalIndexCountStatus gc, Action onComplete, Action<Error> onError)
         {
-            GoalStateSummary gs = new GoalStateSummary(1);
-            gs.states.Add(gc.GoalIndex.ToString(), gc);
+            GoalStateSummary gs = new(1);
+            gs.Add(gc);
             SetState(gs, onComplete, onError);
         }
 

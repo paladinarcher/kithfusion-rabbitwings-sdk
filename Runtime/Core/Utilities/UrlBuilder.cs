@@ -1,4 +1,5 @@
 using System.Text;
+using System.Web;
 
 namespace RabbitWings.Core
 {
@@ -127,13 +128,13 @@ namespace RabbitWings.Core
 			if (string.IsNullOrWhiteSpace(value))
 				return this;
 
-			builder.Append($"{Separator}{name}={value}");
+			builder.Append($"{Separator}{URLEncode(name)}={URLEncode(value)}");
 			return this;
 		}
 
 		public UrlBuilder AddParam(string name, int value)
 		{
-			builder.Append($"{Separator}{name}={value}");
+			builder.Append($"{Separator}{URLEncode(name)}={value}");
 			return this;
 		}
 
@@ -142,8 +143,12 @@ namespace RabbitWings.Core
 			if (string.IsNullOrWhiteSpace(value))
 				return this;
 
-			builder.Append($"{Separator}{name}[]={value}");
+			builder.Append($"{Separator}{URLEncode(name)}[]={URLEncode(value)}");
 			return this;
+		}
+		public string URLEncode(string val)
+		{
+			return HttpUtility.UrlEncode(val);
 		}
 	}
 }

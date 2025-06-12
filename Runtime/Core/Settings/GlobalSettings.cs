@@ -28,5 +28,22 @@ namespace RabbitWings.Core
         public string DefaultDevUrl { get; set; } = "https://vrosr3etxd.execute-api.us-east-2.amazonaws.com/dev/rabbit-wings";
         public string DefaultProdApiKey { get; set; } = "MakeThesesRabbitsFly";
         public string DefaultDevApiKey { get; set; } = "MakeThesesRabbitsFly";
+        public MissionAndNetProvider MissionAndNetProvider;
+        [SerializeField] protected GlobalErrorHandler _errorHandler;
+        public GlobalErrorHandler GlobalExceptionHandler
+        {
+            get
+            {
+                if( _errorHandler == null)
+                {
+                    _errorHandler = WebRequestHelper.Instance.gameObject.AddComponent<GlobalErrorHandler>();
+                }
+                return _errorHandler;
+            }
+        }
+        private void Awake()
+        {
+            _instance = this;
+        }
     }
 }

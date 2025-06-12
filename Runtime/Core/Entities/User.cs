@@ -90,12 +90,13 @@ namespace RabbitWings.Core
                 OnCurrencyUpdated?.Invoke(newBalance);
             }
         }
+        public event Action OnInventorySet;
         public event Action<Dictionary<string, int>> OnItemsUpdated;
         public event Action<int> OnCurrencyUpdated;
         public List<VirtualCurrencyBalance> vcurrencyBalances = new List<VirtualCurrencyBalance>();
         public Dictionary<string, int> itemCounts = new Dictionary<string, int>();
         public GoalItemManager goalItems = new GoalItemManager();
-        public GoalStateSummary goals = new GoalStateSummary(1);
+        public Dictionary<string, GoalIndexCountStatus> states; // legacy data compatibility 
 
         protected Dictionary<string, int> UpdateDiffItems(Dictionary<string, int> update, bool isFull = false)
         {
