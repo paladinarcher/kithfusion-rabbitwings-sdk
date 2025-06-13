@@ -42,7 +42,7 @@ namespace RabbitWings.Core
                 }
             };
         }
-        public void Initialize()
+        public virtual void Initialize()
         {
             if (manager != null)
             {
@@ -58,10 +58,14 @@ namespace RabbitWings.Core
                             Debug.LogError($"Error caching {typeof(C)}: {e}");
                         });
                     });
+                    OnFirstInitialize();
                 }
+                OnAllInitializeWithManager();
                 initialized = true;
             }
         }
+        public virtual void OnFirstInitialize() { }
+        public virtual void OnAllInitializeWithManager() { }
         public virtual void CacheCurrent(C c, Action<C> onComplete, Action<Error> onError)
         {
             Debug.Log($"{GetType()}: caching {c}");
