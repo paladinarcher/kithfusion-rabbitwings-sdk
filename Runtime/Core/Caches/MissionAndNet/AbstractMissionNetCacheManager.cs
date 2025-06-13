@@ -18,6 +18,17 @@ namespace RabbitWings.Core
 
         protected Coroutine watcher;
         public abstract V Data { get; set; }
+        public T Current
+        {
+            get
+            {
+                if (Data != null)
+                {
+                    return Data.GetMissionData();
+                }
+                return null;
+            }
+        }
 
         protected virtual void Awake()
         {
