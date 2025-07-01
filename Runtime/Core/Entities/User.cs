@@ -90,7 +90,6 @@ namespace RabbitWings.Core
                 OnCurrencyUpdated?.Invoke(newBalance);
             }
         }
-        public event Action OnInventorySet;
         public event Action<Dictionary<string, int>> OnItemsUpdated;
         public event Action<int> OnCurrencyUpdated;
         public List<VirtualCurrencyBalance> vcurrencyBalances = new List<VirtualCurrencyBalance>();

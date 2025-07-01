@@ -3,7 +3,7 @@ using System.Web;
 
 namespace RabbitWings.Core
 {
-	internal class UrlBuilder
+	public class UrlBuilder
 	{
 		private readonly StringBuilder builder;
 		private bool isFirstParamPassed;
@@ -107,7 +107,17 @@ namespace RabbitWings.Core
 			return AddParam("type", value);
 		}
 
-		public UrlBuilder AddArray<T>(string name, T[] values)
+		public UrlBuilder AddMission(string value)
+		{
+			return AddParam("mission_name", value);
+        }
+
+        public UrlBuilder AddNetworkID(string value)
+        {
+            return AddParam("network_id", value);
+        }
+
+        public UrlBuilder AddArray<T>(string name, T[] values)
 		{
 			if (string.IsNullOrEmpty(name))
 				return this;

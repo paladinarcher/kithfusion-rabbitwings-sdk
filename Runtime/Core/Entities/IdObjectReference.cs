@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace RabbitWings.Core
 {
-    public class IdObjectReference<Y> : IEquatable<IdObjectReference<Y>> where Y : class
+    public class IdObjectReference<Y> : IDType where Y : class
     {
-        public string id;
-        public string type;
         public Y myObject;
-
-        public bool Equals(IdObjectReference<Y> other)
+        public override string Type
         {
-            return other != null && other.id == id && other.type == type;
+            get
+            {
+                return typeof(Y).Name;
+            }
         }
     }
 }
