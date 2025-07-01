@@ -9,6 +9,7 @@ namespace RabbitWings.Kill
 {
     public class KillCache : RestJsonGeneric<Kill, FullKill>
     {
+        public KillPointCache PointCache;
         public Kill GetKill(string KillGUID, float startTime)
         {
             Kill k = new()
@@ -40,6 +41,19 @@ namespace RabbitWings.Kill
         protected override UrlBuilder SetAdditionalParams(UrlBuilder urlBuilder)
         {
             return urlBuilder.AddMission(GlobalSettings.Instance.MissionAndNetProvider.MissionName).AddNetworkID(GlobalSettings.Instance.MissionAndNetProvider.NetName);
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            if (PointCache != null)
+            {
+                PointCache.GetCache((KillPoints i) => {
+                    Debug.Log("Got the kill points cache: " + i);
+                }, (Error e) => {
+                    Debug.LogError("Got Error! " + e.ToString());
+                });
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace RabbitWings.Core
 				return sdkVersion;
 			}
 		}
-		private static string sdkVersion = "1.1.33";
+		private static string sdkVersion = "1.1.34";
 
 		public const string DEFAULT_PROJECT_ID = "77640";
 		public const string DEFAULT_LOGIN_ID = "026201e3-7e40-11ea-a85b-42010aa80004";
